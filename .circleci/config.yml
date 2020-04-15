@@ -15,12 +15,12 @@ jobs:
 workflows:
   do_it:
     jobs:
-      - build-and-test
+      - build-and-test:
         filters:
           branches:
             ignore:
-            - master
-      - heroku/deploy-via-git: 
+              - master
+      - heroku/deploy-via-git:
           requires:
             - build-and-test
           filters:
