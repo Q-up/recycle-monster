@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withApp } from "react-pixi-fiber";
-import Bunny from "./components/Bunny";
+import Monster from "./components/Monster";
 
-class RotatingBunny extends Component {
+class RotatingMonster extends Component {
   state = {
     rotation: 0
   };
@@ -19,13 +19,13 @@ class RotatingBunny extends Component {
   animate = delta => {
     this.setState(state => ({
       ...state,
-      rotation: state.rotation + 0.01 * delta
+      rotation: state.rotation + 1 * delta
     }));
   };
 
   render() {
-    return <Bunny {...this.props} rotation={this.state.rotation} />;
+    return <Monster {...this.props} rotation={this.state.rotation} />;
   }
 }
 
-export default withApp(RotatingBunny);
+export default withApp(RotatingMonster);
