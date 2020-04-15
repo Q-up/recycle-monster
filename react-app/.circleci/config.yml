@@ -9,7 +9,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: cd react-app && npm install && npm test
+            - run: npm test
 workflows:
   build-and-test:
     jobs:
