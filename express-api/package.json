@@ -1,10 +1,11 @@
 {
   "name": "express-api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node web.js"
+    "start": "node web.js",
+    "heroku-postbuild": "cd react-app && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
