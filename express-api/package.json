@@ -4,8 +4,7 @@
   "main": "web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node web.js",
-    "heroku-postbuild": "cd react-app && npm install && npm run build"
+    "start": "node web.js"
   },
   "author": "",
   "license": "ISC",
