@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { withApp } from "react-pixi-fiber";
 import Monster from "./components/Monster";
 
@@ -19,7 +19,7 @@ class RotatingMonster extends Component {
   animate = delta => {
     this.setState(state => ({
       ...state,
-      rotation: state.rotation + 1 * delta
+      rotation: state.rotation + 0.1 * delta
     }));
   };
 
