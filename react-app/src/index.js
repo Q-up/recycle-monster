@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import { Stage } from "react-pixi-fiber";
 import RotatingMonster from "./App";
 
-const height = 450;
-const width = 600;
+const height = 900;
+const width = 900;
 const OPTIONS = {
   backgroundColor: 0xffffff,
   height: height,
