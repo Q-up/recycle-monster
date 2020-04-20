@@ -19,7 +19,7 @@ class RotatingMonster extends Component {
   animate = delta => {
     this.setState(state => ({
       ...state,
-      rotation: state.rotation + 0.1 * delta
+      rotation: state.rotation + 0.001 * delta
     }));
   };
 
