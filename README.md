@@ -14,8 +14,8 @@ Created with Javascript, NodeJS, Express, PostreSQL, React, and PIXI
 
 ###### After cloning the repo:
 
-`cd recycle-monster`
-`npm install`
-`cd react-app`
-`npm install`
-`npm start`
+- `cd recycle-monster`
+- `npm install`
+- `cd react-app`
+- `npm install`
+- `npm start`
