@@ -11,7 +11,7 @@ jobs:
       - checkout
       - node/with-cache:
           steps:
-            - run: cd react-app && npm install && npm run build
+            - run: cd react-app && npm install && npm run build && npm start
 workflows:
   do_it:
     jobs:
