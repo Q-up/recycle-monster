@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { withApp } from "react-pixi-fiber";
 import Monster from "./components/Monster";
 
-class RotatingMonster extends Component {
+class App extends Component {
   state = {
     rotation: 0
   };
@@ -28,4 +28,4 @@ class RotatingMonster extends Component {
   }
 }
 
-export default withApp(RotatingMonster);
+export default withApp(App);
