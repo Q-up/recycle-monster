@@ -4,6 +4,10 @@ Recycle monster is a game that teaches proper recycling to its users. There are 
 
 Created with Javascript, NodeJS, Express, PostreSQL, React, and PIXI
 
+## This project has been deployed using Heroku
+
+- [Recycle Monster Heroku App](https://recycle-monster.herokuapp.com/)
+
 ## Project overview:
 
 - [Project Strategy](https://docs.google.com/document/d/1RT8zBDGdXEcLAQNiVZaubnKyeLJ45xqeRmECqGXoui4/edit?usp=sharing)
