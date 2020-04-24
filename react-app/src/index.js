@@ -1,24 +1,25 @@
-import React, { Component } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
+import "./App.css";
+import App from "./App";
 import { Stage } from "react-pixi-fiber";
-import RotatingMonster from "./App";
 
-const height = 900;
-const width = 900;
+const rootDiv = document.getElementById("root");
+const height = rootDiv.height || 600;
+const width = rootDiv.width || 800;
+console.log("rootDiv dimensions:", width, height);
+
 const OPTIONS = {
-  backgroundColor: 0xffffff,
-  height: height,
-  width: width
+  transparent: true,
+  width: width,
+  height: height
 };
 
-class App extends Component {
-  render() {
-    return (
-      <Stage options={OPTIONS}>
-        <RotatingMonster x={width / 2} y={height / 2} />
-      </Stage>
-    );
-  }
-}
+// const background = new PIXI.Texture.from(cleanearth).load;
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(
+  <Stage options={OPTIONS}>
+    <App />
+  </Stage>,
+  document.getElementById("root")
+);

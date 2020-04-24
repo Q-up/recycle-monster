@@ -1,0 +1,13 @@
+body {
+  margin: 0;
+}
+div#root {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-image: url("CleanEarthBackground.jpg");
+  background-size: contain;
+  /* do we need these? */
+  background-position: center;
+  background-repeat: no-repeat, repeat;
+}

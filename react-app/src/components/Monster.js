@@ -1,7 +1,7 @@
 import React from "react";
 import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
-import monster from "./monsternobackground.jpg";
+import monster from "./monster.png";
 
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
