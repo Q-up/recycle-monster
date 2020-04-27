@@ -39,16 +39,19 @@ class App extends Component {
     let monsterState = { ...this.state.monster };
     let spread = monsterState.maxX - monsterState.minX; // total distance, left to right
     let middle = monsterState.minX + spread / 2;
+    // let newX = monsterState.x + 0.0 + 10 * (0.51 - Math.random());
     let newX = middle + (spread / 2) * Math.sin(now);
     monsterState.x = Math.max(
       monsterState.minX,
       Math.min(monsterState.maxX, newX)
     );
+    // monsterState.rotation = 0.2 * (0.5 - Math.random());
     monsterState.rotation = 0.5 * Math.sin(Math.PI * now);
     // monsterState.y = monsterState.minY - Math.random() * 10;
     this.setState(state => ({
       ...state,
       monster: { ...monsterState }
+      // rotation: state.rotation + 0.001 * delta
     }));
   };
 
