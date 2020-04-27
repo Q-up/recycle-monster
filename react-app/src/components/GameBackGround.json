@@ -1,0 +1,71 @@
+{"frames": {
+
+"CompostBin.png":
+{
+	"frame": {"x":25,"y":0,"w":118,"h":120},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":118,"h":120},
+	"sourceSize": {"w":118,"h":120}
+},
+"Earth_01.png":
+{
+	"frame": {"x":0,"y":188,"w":1000,"h":750},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":750},
+	"sourceSize": {"w":1000,"h":750}
+},
+"Earth_02.png":
+{
+	"frame": {"x":0,"y":938,"w":1000,"h":750},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":750},
+	"sourceSize": {"w":1000,"h":750}
+},
+"fiji-water-bottle.png":
+{
+	"frame": {"x":0,"y":0,"w":25,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":70},
+	"sourceSize": {"w":25,"h":70}
+},
+"Monster_01.png":
+{
+	"frame": {"x":379,"y":0,"w":263,"h":188},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":188},
+	"sourceSize": {"w":263,"h":188}
+},
+"RecycleBin.png":
+{
+	"frame": {"x":143,"y":0,"w":118,"h":115},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":118,"h":115},
+	"sourceSize": {"w":118,"h":115}
+},
+"TrashBin.png":
+{
+	"frame": {"x":261,"y":0,"w":118,"h":118},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":118,"h":118},
+	"sourceSize": {"w":118,"h":118}
+}},
+"animations": {
+	"Earth": ["Earth_01.png","Earth_02.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "GameBackGround.png",
+	"format": "RGBA8888",
+	"size": {"w":1000,"h":1688},
+	"scale": "0.41667",
+	"smartupdate": "$TexturePacker:SmartUpdate:e3e6f89f6efd1f1cb676fc3b2ab0c111:1651c1eb7e0b94d8c42c2db37578b64f:ba071f4d21d11f276f7b13d2265183f1$"
+}
+}
