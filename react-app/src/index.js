@@ -1,13 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 import "./App.css";
-import App from "./App";
+import MyPixiApp from "./App";
 import { Stage } from "react-pixi-fiber";
 
 const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;
 const width = rootDiv.width || 800;
-console.log("rootDiv dimensions:", width, height);
 
 const OPTIONS = {
   transparent: true,
@@ -15,11 +14,9 @@ const OPTIONS = {
   height: height
 };
 
-// const background = new PIXI.Texture.from(cleanearth).load;
-
-ReactDOM.render(
+render(
   <Stage options={OPTIONS}>
-    <App />
+    <MyPixiApp x={200} y={200} />
   </Stage>,
   document.getElementById("root")
 );

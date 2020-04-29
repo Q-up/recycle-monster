@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import PropTypes from "prop-types";
 import { withApp } from "react-pixi-fiber";
-import Monster from "./components/Monster";
+import Game from "./components/GamePage";
 
 // TODO: make this DRY with index.js
 const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;
 const width = rootDiv.width || 800;
 
-class App extends Component {
+// this will be wrapped with withApp,
+// and imported, probably as App
+class WrappedApp extends Component {
   margin = 115;
   state = {
     rotation: 0,
-    // scale: 0.16,
     monster: {
       x: width / 2,
       y: height / 1.3,
@@ -22,9 +22,9 @@ class App extends Component {
       maxX: width - this.margin,
       scale: 0.16
     }
-    // <Monster x={width / 2} y={height / 1.3} />,
   };
 
+  // this.props.app is given to us by withApp().
   componentDidMount() {
     this.props.app.ticker.add(this.animate);
   }
@@ -55,18 +55,15 @@ class App extends Component {
     }));
   };
 
-  /*
   render() {
-    return <Monster {...this.props} scale={this.state.scale} />;
-  }
-  */
-  render() {
-    return <Monster {...this.state.monster} />;
+    return <Game app={this.props.app} monstate={this.state.monster}></Game>;
+
     // trash.map(item => <Trash rotation={this.state.rotation}>);
   }
 }
-App.propTypes = {
+WrappedApp.propTypes = {
   app: PropTypes.object
 };
 
-export default withApp(App);
+console.log("WrappedApp=", WrappedApp);
+export default withApp(WrappedApp);
