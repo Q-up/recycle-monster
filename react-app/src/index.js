@@ -1,24 +1,22 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
+import { render } from "react-dom";
+import "./App.css";
+import MyPixiApp from "./App";
 import { Stage } from "react-pixi-fiber";
-import RotatingMonster from "./App";
 
-const height = 900;
-const width = 900;
+const rootDiv = document.getElementById("root");
+const height = rootDiv.height || 600;
+const width = rootDiv.width || 800;
+
 const OPTIONS = {
-  backgroundColor: 0xffffff,
-  height: height,
-  width: width
+  transparent: true,
+  width: width,
+  height: height
 };
 
-class App extends Component {
-  render() {
-    return (
-      <Stage options={OPTIONS}>
-        <RotatingMonster x={width / 2} y={height / 2} />
-      </Stage>
-    );
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById("root"));
+render(
+  <Stage options={OPTIONS}>
+    <MyPixiApp x={200} y={200} />
+  </Stage>,
+  document.getElementById("root")
+);

@@ -1,11 +1,11 @@
 import React from "react";
 import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
-import monster from "./images/monster.png";
+import trash from "./monster.png";
 
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
-function Monster(props) {
+function Trash(props) {
   return (
     <Sprite
       anchor={centerAnchor}
@@ -15,4 +15,4 @@ function Monster(props) {
   );
 }
 
-export default Monster;
+export default Trash;
