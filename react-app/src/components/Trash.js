@@ -7,11 +7,11 @@ function Trash(props) {
   const spriteAtlas = "/images/GameBackGround.json";
   let sheet = loader.resources[spriteAtlas];
   const centerAnchor = new PIXI.Point(0.5, 0.5);
-  const trash = sheet.textures["fiji-water-bottle.png"];
+  const fijiBottle = sheet.textures["fiji-water-bottle.png"];
 
   return (
     <Sprite
-      texture={trash}
+      texture={fijiBottle}
       anchor={centerAnchor}
       scale={0.4}
       y={500}

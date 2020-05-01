@@ -27,32 +27,6 @@ class WrappedApp extends Component {
     },
   };
 
-  makeTrashAnimation() {
-    let firstNow = new Date().getTime() / 1000.0;
-    return (delta) => {
-      // current time in seconds with fractional milliseconds:
-      let now = new Date().getTime() / 1000.0 - firstNow;
-
-      let trashState = { ...this.state.trash };
-      // let spread = trashState.maxY - trashState.minY; // total distance, left to right
-      // let middle = trashState.minY + spread / 2;
-      //let newX = trashState.x + 0.0 + 10 * (0.51 - Math.random());
-      //let newY = middle + (spread / 2) * Math.sin(now);
-      // trashState.x = Math.max(trashState.minY, Math.min(trashState.maxY, ));
-      trashState.x = 100;
-      trashState.y = now * now * 20;
-      trashState.rotation = now / 2;
-      let floor = trashState.maxY;
-      trashState.y = Math.min(trashState.y, floor);
-      //trashState.rotation = 0.5 * Math.sin(Math.PI * now);
-      // trashState.y = trashState.minY - Math.random() * 10;
-      this.setState((state) => ({
-        ...state,
-        trash: { ...trashState },
-        // rotation: state.rotation + 0.001 * delta
-      }));
-    };
-  }
   // this.props.app is given to us by withApp().
   componentDidMount() {
     this.props.app.ticker.add(this.animate);
@@ -86,6 +60,34 @@ class WrappedApp extends Component {
       // rotation: state.rotation + 0.001 * delta
     }));
   };
+
+  makeTrashAnimation() {
+    let firstNow = new Date().getTime() / 1000.0;
+    return (delta) => {
+      // current time in seconds with fractional milliseconds:
+      let now = new Date().getTime() / 1000.0 - firstNow;
+      const gravity = now * now * 20;
+
+      let trashState = { ...this.state.trash };
+      // let spread = trashState.maxY - trashState.minY; // total distance, left to right
+      // let middle = trashState.minY + spread / 2;
+      //let newX = trashState.x + 0.0 + 10 * (0.51 - Math.random());
+      //let newY = middle + (spread / 2) * Math.sin(now);
+      // trashState.x = Math.max(trashState.minY, Math.min(trashState.maxY, ));
+      //trashState.x = Math.random() * 800;
+      trashState.y = now * now * 20;
+      trashState.rotation = now / 2;
+      let floor = trashState.maxY;
+      trashState.y = Math.min(trashState.y, floor);
+      //trashState.rotation = 0.5 * Math.sin(Math.PI * now);
+      // trashState.y = trashState.minY - Math.random() * 10;
+      this.setState((state) => ({
+        ...state,
+        trash: { ...trashState },
+        // rotation: state.rotation + 0.001 * delta
+      }));
+    };
+  }
 
   render() {
     return (
