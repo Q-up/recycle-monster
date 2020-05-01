@@ -28,10 +28,10 @@ function Game(props) {
         <Sprite texture={trash} scale={0.39} x={650} y={20} {...props} />
         <Sprite texture={recycle} scale={0.4} x={330} y={20} {...props} />
         <Compost {...props} />
+        <Monster {...props.monstate} />
         <DraggableContainer>
           <Trash {...props.trashState} />
         </DraggableContainer>
-        <Monster {...props.monstate} />
       </Container>
     );
   } else {

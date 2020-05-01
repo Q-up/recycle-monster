@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import { withApp } from "react-pixi-fiber";
 import Game from "./components/GamePage";
 
@@ -75,7 +75,7 @@ class WrappedApp extends Component {
       //let newY = middle + (spread / 2) * Math.sin(now);
       // trashState.x = Math.max(trashState.minY, Math.min(trashState.maxY, ));
       //trashState.x = Math.random() * 800;
-      trashState.y = now * now * 20;
+      trashState.y = gravity;
       trashState.rotation = now / 2;
       let floor = trashState.maxY;
       trashState.y = Math.min(trashState.y, floor);
