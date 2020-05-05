@@ -9,11 +9,11 @@ function Monster(props) {
   const spriteAtlas = "/images/GameBackGround.json";
   let sheet = loader.resources[spriteAtlas];
   const centerAnchor = new PIXI.Point(0.5, 0.5);
-  const monster = sheet.animation["Monster_01.png"];
+  const monster = sheet.textures["Monster_01.png"];
 
   return (
     <Sprite
-      animation={monster}
+      texture={monster}
       anchor={centerAnchor}
       scale={0.4}
       y={500}

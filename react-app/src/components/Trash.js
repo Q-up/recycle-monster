@@ -22,7 +22,7 @@ function Trash(props) {
           texture={item}
           anchor={centerAnchor}
           scale={0.4}
-          y={500}
+          y={-1}
           x={330}
           {...props}
         />

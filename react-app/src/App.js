@@ -15,7 +15,7 @@ class WrappedApp extends Component {
   state = {
     rotation: 0,
     trash: {
-      minY: height / 1.3,
+      minY: -2,
       maxY: height - 75,
       minX: this.margin,
       maxX: width - this.margin,
@@ -66,7 +66,7 @@ class WrappedApp extends Component {
     return (delta) => {
       // current time in seconds with fractional milliseconds:
       let now = new Date().getTime() / 1000.0 - firstNow;
-      const gravity = now * now * 20;
+      const gravity = now * now * 20 - 50;
       // instance.interactive = true;
       // instance.cursor = "pointer";
       let trashState = { ...this.state.trash };
