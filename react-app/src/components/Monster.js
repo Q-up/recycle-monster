@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 //import monster from "./images/monster.png";

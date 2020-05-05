@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 import DraggableContainer from "./DraggableContainer";
@@ -19,6 +19,10 @@ function Trash(props) {
     return array.map((item) => (
       <DraggableContainer>
         <Sprite
+          interactive
+          pointerdown={this.props.pointerDown}
+          pointermove={this.props.pointerMove}
+          pointerup={this.props.pointerUp}
           texture={item}
           anchor={centerAnchor}
           scale={0.4}
