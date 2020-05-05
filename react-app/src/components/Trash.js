@@ -17,20 +17,18 @@ function Trash(props) {
   // };
   function getItems(array) {
     return array.map((item) => (
-      <DraggableContainer>
-        <Sprite
-          interactive
-          pointerdown={this.props.pointerDown}
-          pointermove={this.props.pointerMove}
-          pointerup={this.props.pointerUp}
-          texture={item}
-          anchor={centerAnchor}
-          scale={0.4}
-          y={-1}
-          x={330}
-          {...props}
-        />
-      </DraggableContainer>
+      <Sprite
+        interactive
+        pointerdown={props.pointerDown}
+        pointermove={props.pointerMove}
+        pointerup={props.pointerUp}
+        texture={item}
+        anchor={centerAnchor}
+        scale={0.4}
+        y={-1}
+        x={330}
+        {...props}
+      />
     ));
   }
 
