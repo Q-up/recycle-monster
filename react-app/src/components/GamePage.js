@@ -19,19 +19,20 @@ function Game(props) {
     let sheet = loader.resources[spriteAtlas];
 
     const earth = sheet.textures["Earth_01.png"];
-    const trash = sheet.textures["TrashBin.png"];
-    const recycle = sheet.textures["RecycleBin.png"];
+    const trashBin = sheet.textures["TrashBin.png"];
+    const recycleBin = sheet.textures["RecycleBin.png"];
 
+    function doSomething() {
+      console.log("something has been done! ;)");
+    }
     return (
       <Container>
         <Sprite texture={earth} scale={0.33} />
-        <Sprite texture={trash} scale={0.39} x={650} y={20} {...props} />
-        <Sprite texture={recycle} scale={0.4} x={330} y={20} {...props} />
-        <Compost {...props} />
         <Monster {...props.monstate} />
-        <DraggableContainer>
-          <Trash {...props.trashState} />
-        </DraggableContainer>
+        <Trash {...props.trashState} />
+        <Sprite texture={trashBin} scale={0.39} x={650} y={20} {...props} />
+        <Sprite texture={recycleBin} scale={0.4} x={330} y={20} {...props} />
+        <Compost {...props} />
       </Container>
     );
   } else {
@@ -39,4 +40,42 @@ function Game(props) {
   }
 }
 
+// <Trash state={props.trashState} />
+// {/* if props is: {key1: 1, key2: "value 2"}} */}
+// <Compost key1='1' key2='value 2' />
+// <Compost combined={props} action={doSomething} />
+// <Compost action={doSomething} {...props} />
+/* inside Compost's constructor(props), props will be:
+    {combined: {key1:1, key2: "value 2"}}
+
+    versus, for the spread version or its equivalent:
+
+    {key1: 1, key2: "value 2"}
+
+    line 34 version, props is:
+    {combined: {key1:1, key2: "value 2"}, action: [function]}
+
+    line 35:
+    {key1: 1, key2: "value 2", action: [function]}
+
+    
+*/
+/*
+    
+    if we had:
+    props = {
+      foo: { baz: 1 }
+      bar: 2
+    }
+    
+    Then:
+    
+    <Trash {...props.foo}/>
+    
+    is exactly equivalent to:
+    
+    <Trash baz=1 />
+    
+    
+    */
 export default Game;

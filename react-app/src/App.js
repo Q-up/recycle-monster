@@ -67,7 +67,8 @@ class WrappedApp extends Component {
       // current time in seconds with fractional milliseconds:
       let now = new Date().getTime() / 1000.0 - firstNow;
       const gravity = now * now * 20;
-
+      // instance.interactive = true;
+      // instance.cursor = "pointer";
       let trashState = { ...this.state.trash };
       // let spread = trashState.maxY - trashState.minY; // total distance, left to right
       // let middle = trashState.minY + spread / 2;

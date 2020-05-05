@@ -1,7 +1,7 @@
 import { CustomPIXIComponent } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
-const TYPE = "DraggableContainer";
+const TYPE = "DragTrash";
 const behavior = {
   customDisplayObject: () => new PIXI.Container(),
   customDidAttach: function (instance) {
@@ -9,7 +9,9 @@ const behavior = {
     instance.cursor = "pointer";
 
     let draggedObject = null;
+
     this.dragStart = () => {
+      console.log(instance);
       draggedObject = instance;
       if (typeof instance.onDragStart === "function")
         instance.onDragStart(instance);
