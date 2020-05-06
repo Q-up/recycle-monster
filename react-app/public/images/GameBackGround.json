@@ -18,7 +18,7 @@
 },
 "Earth_01.png":
 {
-	"frame": {"x":0,"y":188,"w":1000,"h":750},
+	"frame": {"x":0,"y":250,"w":1000,"h":750},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":750},
@@ -26,7 +26,7 @@
 },
 "Earth_02.png":
 {
-	"frame": {"x":1000,"y":188,"w":1000,"h":750},
+	"frame": {"x":1000,"y":250,"w":1000,"h":750},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":1000,"h":750},
@@ -42,35 +42,43 @@
 },
 "Monster_01.png":
 {
-	"frame": {"x":495,"y":0,"w":263,"h":188},
+	"frame": {"x":1543,"y":0,"w":271,"h":250},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":188},
-	"sourceSize": {"w":263,"h":188}
+	"spriteSourceSize": {"x":0,"y":0,"w":271,"h":250},
+	"sourceSize": {"w":271,"h":250}
 },
 "Monster_02.png":
 {
-	"frame": {"x":758,"y":0,"w":263,"h":188},
+	"frame": {"x":754,"y":0,"w":263,"h":250},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":188},
-	"sourceSize": {"w":263,"h":188}
+	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":250},
+	"sourceSize": {"w":263,"h":250}
 },
 "Monster_03.png":
 {
-	"frame": {"x":1021,"y":0,"w":263,"h":188},
+	"frame": {"x":1017,"y":0,"w":263,"h":250},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":188},
-	"sourceSize": {"w":263,"h":188}
+	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":250},
+	"sourceSize": {"w":263,"h":250}
 },
 "Monster_04.png":
 {
-	"frame": {"x":1284,"y":0,"w":263,"h":188},
+	"frame": {"x":495,"y":0,"w":259,"h":250},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":188},
-	"sourceSize": {"w":263,"h":188}
+	"spriteSourceSize": {"x":0,"y":0,"w":259,"h":250},
+	"sourceSize": {"w":259,"h":250}
+},
+"Monster_mouth_01.png":
+{
+	"frame": {"x":1280,"y":0,"w":263,"h":250},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":263,"h":250},
+	"sourceSize": {"w":263,"h":250}
 },
 "plasticbag.png":
 {
@@ -105,8 +113,8 @@
 	"version": "1.0",
 	"image": "GameBackGround.png",
 	"format": "RGBA8888",
-	"size": {"w":2000,"h":938},
+	"size": {"w":2000,"h":1000},
 	"scale": "0.41667",
-	"smartupdate": "$TexturePacker:SmartUpdate:5f8d12720529eb7134285f8f1665811c:8d090fb23ad6d81f863b2d1485af0c2c:ba071f4d21d11f276f7b13d2265183f1$"
+	"smartupdate": "$TexturePacker:SmartUpdate:b1bfd21c18e442cf0166f1e3ad8dbaab:b61c8e768345a2fbb2df6bdfae3843e0:ba071f4d21d11f276f7b13d2265183f1$"
 }
 }
