@@ -15,6 +15,11 @@ function signedRandom() {
   return 2.0 * (Math.random() - 0.5);
 }
 
+// The current time (in seconds since 1970)
+function currentTime() {
+  return new Date().getTime() / 1000.0;
+}
+
 class Game extends Component {
   margin = 115;
   state = {
@@ -28,8 +33,8 @@ class Game extends Component {
 
   generateTrashState() {
     return {
-      velocity: { x: Math.random() * 700 - 100, y: 10, rotation: 0 },
-      x: Math.random() * width,
+      velocity: { x: signedRandom() * 200, y: signedRandom() * 200, rotation: signedRandom() * 1 },
+      x: signedRandom() * 200 + 0.5 * width,
       y: 0,
       rotation: 0,
       fixed: false,
@@ -79,13 +84,9 @@ class Game extends Component {
     }));
   };
 
-  // The current time (in seconds since 1970)
-  now() {
-    return new Date().getTime() / 1000.0;
-  }
-
-  doPhysics(trash, deltaT) {
-    if (trash.fixed) return;
+  doPhysics(previousTrash, deltaT) {
+    let trash = { ...previousTrash };
+    if (trash.fixed) return trash;
 
     // Move the object according to its velocity
     // and the amount of time since the last frame of animation
@@ -95,8 +96,6 @@ class Game extends Component {
 
     trash.velocity.y += 10; // gravity
 
-    let floor = trash.maxY;
-
     if (trash.x > trash.maxX || trash.x < trash.minX) {
       trash.x = Math.min(trash.x, trash.maxX);
       trash.x = Math.max(trash.x, trash.minX);
@@ -105,6 +104,8 @@ class Game extends Component {
         trash.velocity.x *= -1;
       }
     }
+
+    let floor = trash.maxY;
     // When the object is hitting the floor...
     if (trash.y > floor) {
       // Make sure it doesn't go any farther down
@@ -125,24 +126,21 @@ class Game extends Component {
         trash.velocity.rotation += signedRandom() * mag;
       }
     }
+
+    return trash;
   }
 
   makeTrashAnimation() {
-    let then = this.now();
+    let then = currentTime();
 
     return (delta) => {
-      let now = this.now();
+      let now = currentTime();
       let deltaT = now - then;
       then = now;
 
-      let previousTrash = this.state.trashList[0];
-
-      let trash = { ...previousTrash };
-      this.doPhysics(trash, deltaT);
-
       this.setState((state) => ({
         ...state,
-        trashList: [trash],
+        trashList: this.state.trashList.map(trash => this.doPhysics(trash, deltaT)),
       }));
     };
   }
@@ -208,7 +206,7 @@ class Game extends Component {
         pointerDown={this.pointerDown}
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
-        {...this.state.trashList[0]}
+        {...item}
       />
     ));
   }
