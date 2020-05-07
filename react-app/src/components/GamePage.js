@@ -33,8 +33,8 @@ class Game extends Component {
 
   generateTrashState() {
     return {
-      velocity: { x: Math.random() * 700 - 100, y: 10, rotation: 0 },
-      x: Math.random() * width,
+      velocity: { x: signedRandom() * 200, y: signedRandom() * 200, rotation: signedRandom() * 1 },
+      x: signedRandom() * 200 + 0.5 * width,
       y: 0,
       rotation: 0,
       fixed: false,
