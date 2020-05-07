@@ -15,6 +15,11 @@ function signedRandom() {
   return 2.0 * (Math.random() - 0.5);
 }
 
+// The current time (in seconds since 1970)
+function currentTime() {
+  return new Date().getTime() / 1000.0;
+}
+
 class Game extends Component {
   margin = 115;
   state = {
@@ -79,11 +84,6 @@ class Game extends Component {
     }));
   };
 
-  // The current time (in seconds since 1970)
-  now() {
-    return new Date().getTime() / 1000.0;
-  }
-
   doPhysics(trash, deltaT) {
     if (trash.fixed) return;
 
@@ -128,10 +128,10 @@ class Game extends Component {
   }
 
   makeTrashAnimation() {
-    let then = this.now();
+    let then = currentTime();
 
     return (delta) => {
-      let now = this.now();
+      let now = currentTime();
       let deltaT = now - then;
       then = now;
 
