@@ -83,6 +83,41 @@ class Game extends Component {
     return new Date().getTime() / 1000.0;
   }
 
+  doPhysics(trash, deltaT) {
+    if (trash.fixed) return;
+
+    // Move the object according to its velocity
+    // and the amount of time since the last frame of animation
+    trash.x += deltaT * trash.velocity.x;
+    trash.y += deltaT * trash.velocity.y;
+    trash.rotation += deltaT * trash.velocity.rotation;
+
+    trash.velocity.y += 10; // gravity
+
+    let floor = trash.maxY;
+
+    // When the object is hitting the floor...
+    if (trash.y > floor) {
+      // Make sure it doesn't go any farther down
+      trash.y = Math.min(trash.y, floor);
+
+      // Friction slows down the object's velocity
+      trash.velocity.x *= 0.5;
+      trash.velocity.y *= 0.5;
+      trash.velocity.rotation *= 0.5;
+
+      // When the object is pressing into the floor...
+      if (trash.velocity.y > 0) {
+        trash.velocity.y *= -1; // Negate the y-velocity to bounce it back up.
+
+        // Add a random change to rotation and x-velocity.  This makes the bounce a bit chaotic
+        let mag = (trash.velocity.y * trash.velocity.y) / 10000;
+        trash.velocity.x += signedRandom() * mag;
+        trash.velocity.rotation += signedRandom() * mag;
+      }
+    }
+  }
+
   makeTrashAnimation() {
     let then = this.now();
 
@@ -91,44 +126,14 @@ class Game extends Component {
       let deltaT = now - then;
       then = now;
 
-      let trash = { ...this.state.trashList[0] };
+      let previousTrash = this.state.trashList[0]
 
-      if (trash.fixed) return;
-
-      // Move the object according to its velocity
-      // and the amount of time since the last frame of animation
-      trash.x += deltaT * trash.velocity.x;
-      trash.y += deltaT * trash.velocity.y;
-      trash.rotation += deltaT * trash.velocity.rotation;
-
-      trash.velocity.y += 10; // gravity
-
-      let floor = trash.maxY;
-
-      // When the object is hitting the floor...
-      if (trash.y > floor) {
-        // Make sure it doesn't go any farther down
-        trash.y = Math.min(trash.y, floor);
-
-        // Friction slows down the object's velocity
-        trash.velocity.x *= 0.5;
-        trash.velocity.y *= 0.5;
-        trash.velocity.rotation *= 0.5;
-
-        // When the object is pressing into the floor...
-        if (trash.velocity.y > 0) {
-          trash.velocity.y *= -1; // Negate the y-velocity to bounce it back up.
-
-          // Add a random change to rotation and x-velocity.  This makes the bounce a bit chaotic
-          let mag = (trash.velocity.y * trash.velocity.y) / 10000;
-          trash.velocity.x += signedRandom() * mag;
-          trash.velocity.rotation += signedRandom() * mag;
-        }
-      }
+      let trash = { ...previousTrash };
+      this.doPhysics(trash, deltaT);
 
       this.setState((state) => ({
         ...state,
-        trashList: [{ ...trash }],
+        trashList: [trash],
       }));
     };
   }
