@@ -28,8 +28,8 @@ class Game extends Component {
 
   generateTrashState() {
     return {
-      velocity: { x: Math.random() * 200 - 100, y: 10, rotation: 0 },
-      x: Math.random() * 800,
+      velocity: { x: Math.random() * 700 - 100, y: 10, rotation: 0 },
+      x: Math.random() * width,
       y: 0,
       rotation: 0,
       fixed: false,
@@ -97,6 +97,14 @@ class Game extends Component {
 
     let floor = trash.maxY;
 
+    if (trash.x > trash.maxX || trash.x < trash.minX) {
+      trash.x = Math.min(trash.x, trash.maxX);
+      trash.x = Math.max(trash.x, trash.minX);
+
+      if (trash.velocity.x > 0) {
+        trash.velocity.x *= -1;
+      }
+    }
     // When the object is hitting the floor...
     if (trash.y > floor) {
       // Make sure it doesn't go any farther down
