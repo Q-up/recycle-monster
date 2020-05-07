@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Compost from "./Compost";
@@ -15,10 +16,10 @@ class Game extends Component {
   state = {
     trash: {
       velocity: { x: 200, y: 10, rotation: 0 },
-      x : 0,
-      y : 0,
-      rotation : 0,
-      fixed : false,
+      x: 0,
+      y: 0,
+      rotation: 0,
+      fixed: false,
       minY: height / 1.3,
       maxY: height - 75,
       minX: this.margin,
@@ -59,10 +60,7 @@ class Game extends Component {
     let middle = monster.minX + spread / 2;
     let newX = middle + (spread / 2) * Math.sin(now / 2);
 
-    monster.x = Math.max(
-      monster.minX,
-      Math.min(monster.maxX, newX)
-    );
+    monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
 
     monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
@@ -78,7 +76,7 @@ class Game extends Component {
   }
 
   signedRandom() {
-    return 2.0*(Math.random()-0.5);
+    return 2.0 * (Math.random() - 0.5);
   }
 
   makeTrashAnimation() {
@@ -86,8 +84,7 @@ class Game extends Component {
 
     return (delta) => {
       let trash = { ...this.state.trash };
-      if (trash.fixed)
-        return;
+      if (trash.fixed) return;
 
       let now = this.now();
       let deltaT = now - then;
@@ -118,7 +115,7 @@ class Game extends Component {
           trash.velocity.y *= -1; // Negate the y-velocity to bounce it back up.
 
           // Add a random change to rotation and x-velocity.  This makes the bounce a bit chaotic
-          let mag = trash.velocity.y * trash.velocity.y / 10000;
+          let mag = (trash.velocity.y * trash.velocity.y) / 10000;
           trash.velocity.x += this.signedRandom() * mag;
           trash.velocity.rotation += this.signedRandom() * mag;
         }
@@ -131,11 +128,11 @@ class Game extends Component {
     };
   }
 
-  dragHappening = false
-  dragStartScreenX = 0
-  dragStartScreenY = 0
-  dragStartObjectX = 0
-  dragStartObjectY = 0
+  dragHappening = false;
+  dragStartScreenX = 0;
+  dragStartScreenY = 0;
+  dragStartObjectX = 0;
+  dragStartObjectY = 0;
 
   pointerDown(e) {
     this.dragStartScreenX = e.data.global.x;
@@ -155,8 +152,8 @@ class Game extends Component {
       ...state,
       trash: {
         ...state.trash,
-        velocity : {x : 0, y : 0, rotation: 0},
-        fixed : true,
+        velocity: { x: 0, y: 0, rotation: 0 },
+        fixed: true,
         x: x - this.dragStartScreenX + this.dragStartObjectX,
         y: y - this.dragStartScreenY + this.dragStartObjectY,
       },
@@ -175,12 +172,11 @@ class Game extends Component {
       ...state,
       trash: {
         ...state.trash,
-        fixed : false,
+        fixed: false,
       },
     }));
     this.dragHappening = false;
   }
-
 
   render() {
     const loader = PIXI.Loader.shared;
@@ -201,59 +197,27 @@ class Game extends Component {
         <Container>
           <Sprite texture={earth} scale={0.33} />
           <Sprite texture={trash} scale={0.39} x={650} y={20} {...this.props} />
-          <Sprite texture={recycle} scale={0.4} x={330} y={20} {...this.props} />
+          <Sprite
+            texture={recycle}
+            scale={0.4}
+            x={330}
+            y={20}
+            {...this.props}
+          />
           <Compost {...this.props} />
           <Monster {...this.state.monster} />
           <Trash
             pointerDown={this.pointerDown}
             pointerMove={this.pointerMove}
             pointerUp={this.pointerUp}
-            {...this.state.trash} />
+            {...this.state.trash}
+          />
         </Container>
       );
     } else {
-      return <Sprite texture={PIXI.Texture.from(splashPage)} scale={0.5} />;
+      return <Sprite texture={PIXI.Texture.from(splashPage)} scale={0.2} />;
     }
   }
-
 }
 
-// <Trash state={props.trashState} />
-// {/* if props is: {key1: 1, key2: "value 2"}} */}
-// <Compost key1='1' key2='value 2' />
-// <Compost combined={props} action={doSomething} />
-// <Compost action={doSomething} {...props} />
-/* inside Compost's constructor(props), props will be:
-    {combined: {key1:1, key2: "value 2"}}
-
-    versus, for the spread version or its equivalent:
-
-    {key1: 1, key2: "value 2"}
-
-    line 34 version, props is:
-    {combined: {key1:1, key2: "value 2"}, action: [function]}
-
-    line 35:
-    {key1: 1, key2: "value 2", action: [function]}
-
-    
-*/
-/*
-    
-    if we had:
-    props = {
-      foo: { baz: 1 }
-      bar: 2
-    }
-    
-    Then:
-    
-    <Trash {...props.foo}/>
-    
-    is exactly equivalent to:
-    
-    <Trash baz=1 />
-    
-    
-    */
 export default Game;

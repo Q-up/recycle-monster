@@ -9,10 +9,7 @@ class WrappedApp extends Component {
   margin = 115;
 
   render() {
-    return (
-      <Game app={this.props.app}
-      ></Game>
-    );
+    return <Game app={this.props.app}></Game>;
   }
 }
 
@@ -20,5 +17,4 @@ WrappedApp.propTypes = {
   app: PropTypes.object,
 };
 
-console.log("WrappedApp=", WrappedApp);
 export default withApp(WrappedApp);
