@@ -5,8 +5,6 @@ import * as PIXI from "pixi.js";
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
 class Trash extends Component {
-  trashGenerate;
-
   getItems(array) {
     const trashItems = [];
     return array.map((item) => (

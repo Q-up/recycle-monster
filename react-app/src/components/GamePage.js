@@ -14,25 +14,27 @@ const width = rootDiv.width || 800;
 class Game extends Component {
   margin = 115;
   state = {
-    trash: [
-      {
-        velocity: { x: 200, y: 10, rotation: 0 },
-        x: 0,
-        y: 0,
-        rotation: 0,
-        fixed: false,
-        minY: height / 1.3,
-        maxY: height - 75,
-        minX: this.margin,
-        maxX: width - this.margin,
-      },
-    ],
+    trashList: [this.generateTrash()],
     monster: {
       minY: height / 1.3,
       minX: this.margin,
       maxX: width - this.margin,
     },
   };
+
+  generateTrash() {
+    return {
+      velocity: { x: 200, y: 10, rotation: 0 },
+      x: 0,
+      y: 0,
+      rotation: 0,
+      fixed: false,
+      minY: height / 1.3,
+      maxY: height - 75,
+      minX: this.margin,
+      maxX: width - this.margin,
+    };
+  }
 
   constructor(props) {
     super(props);
@@ -85,7 +87,7 @@ class Game extends Component {
     let then = this.now();
 
     return (delta) => {
-      let trash = { ...this.state.trash[0] };
+      let trash = { ...this.state.trashList[0] };
       if (trash.fixed) return;
 
       let now = this.now();
@@ -125,7 +127,7 @@ class Game extends Component {
 
       this.setState((state) => ({
         ...state,
-        trash: [{ ...trash }],
+        trashList: [{ ...trash }],
       }));
     };
   }
@@ -140,8 +142,8 @@ class Game extends Component {
     this.dragStartScreenX = e.data.global.x;
     this.dragStartScreenY = e.data.global.y;
 
-    this.dragStartObjectX = this.state.trash[0].x;
-    this.dragStartObjectY = this.state.trash[0].y;
+    this.dragStartObjectX = this.state.trashList[0].x;
+    this.dragStartObjectY = this.state.trashList[0].y;
 
     this.dragHappening = true;
   }
@@ -152,9 +154,9 @@ class Game extends Component {
 
     this.setState((state) => ({
       ...state,
-      trash: [
+      trashList: [
         {
-          ...state.trash[0],
+          ...state.trashList[0],
           velocity: { x: 0, y: 0, rotation: 0 },
           fixed: true,
           x: x - this.dragStartScreenX + this.dragStartObjectX,
@@ -174,9 +176,9 @@ class Game extends Component {
     this.moveToDrag(e);
     this.setState((state) => ({
       ...state,
-      trash: [
+      trashList: [
         {
-          ...state.trash[0],
+          ...state.trashList[0],
           fixed: false,
         },
       ],
@@ -216,7 +218,7 @@ class Game extends Component {
             pointerDown={this.pointerDown}
             pointerMove={this.pointerMove}
             pointerUp={this.pointerUp}
-            {...this.state.trash[0]}
+            {...this.state.trashList[0]}
           />
         </Container>
       );
