@@ -84,8 +84,9 @@ class Game extends Component {
     }));
   };
 
-  doPhysics(trash, deltaT) {
-    if (trash.fixed) return;
+  doPhysics(previousTrash, deltaT) {
+    let trash = { ...previousTrash };
+    if (trash.fixed) return trash;
 
     // Move the object according to its velocity
     // and the amount of time since the last frame of animation
@@ -95,8 +96,6 @@ class Game extends Component {
 
     trash.velocity.y += 10; // gravity
 
-    let floor = trash.maxY;
-
     if (trash.x > trash.maxX || trash.x < trash.minX) {
       trash.x = Math.min(trash.x, trash.maxX);
       trash.x = Math.max(trash.x, trash.minX);
@@ -105,6 +104,8 @@ class Game extends Component {
         trash.velocity.x *= -1;
       }
     }
+
+    let floor = trash.maxY;
     // When the object is hitting the floor...
     if (trash.y > floor) {
       // Make sure it doesn't go any farther down
@@ -125,6 +126,8 @@ class Game extends Component {
         trash.velocity.rotation += signedRandom() * mag;
       }
     }
+
+    return trash;
   }
 
   makeTrashAnimation() {
@@ -135,14 +138,9 @@ class Game extends Component {
       let deltaT = now - then;
       then = now;
 
-      let previousTrash = this.state.trashList[0];
-
-      let trash = { ...previousTrash };
-      this.doPhysics(trash, deltaT);
-
       this.setState((state) => ({
         ...state,
-        trashList: [trash],
+        trashList: this.state.trashList.map(trash => this.doPhysics(trash, deltaT)),
       }));
     };
   }
@@ -208,7 +206,7 @@ class Game extends Component {
         pointerDown={this.pointerDown}
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
-        {...this.state.trashList[0]}
+        {...item}
       />
     ));
   }
