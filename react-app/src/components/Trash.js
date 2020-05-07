@@ -18,8 +18,8 @@ class Trash extends Component {
         texture={item}
         anchor={centerAnchor}
         scale={0.4}
-        y={-1}
-        x={330}
+        y={0}
+        x={0}
         {...this.props}
       />
     ));
