@@ -11,6 +11,10 @@ const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;
 const width = rootDiv.width || 800;
 
+function signedRandom() {
+  return 2.0 * (Math.random() - 0.5);
+}
+
 class Game extends Component {
   margin = 115;
   state = {
@@ -79,20 +83,12 @@ class Game extends Component {
     return new Date().getTime() / 1000.0;
   }
 
-  signedRandom() {
-    return 2.0 * (Math.random() - 0.5);
-  }
-
   makeTrashAnimation() {
     let then = this.now();
 
-    return (delta) => {
-      let trash = { ...this.state.trashList[0] };
+    function doPhysicsStep(prevTrash, deltaT) {
+      let trash = { ...prevTrash };
       if (trash.fixed) return;
-
-      let now = this.now();
-      let deltaT = now - then;
-      then = now;
 
       // Move the object according to its velocity
       // and the amount of time since the last frame of animation
@@ -120,14 +116,24 @@ class Game extends Component {
 
           // Add a random change to rotation and x-velocity.  This makes the bounce a bit chaotic
           let mag = (trash.velocity.y * trash.velocity.y) / 10000;
-          trash.velocity.x += this.signedRandom() * mag;
-          trash.velocity.rotation += this.signedRandom() * mag;
+          trash.velocity.x += signedRandom() * mag;
+          trash.velocity.rotation += signedRandom() * mag;
         }
       }
 
+      return trash;
+    }
+
+    return (delta) => {
+      let now = this.now();
+      let deltaT = now - then;
+      then = now;
+
+      let newTrash = doPhysicsStep(this.state.trashList[0], deltaT)
+
       this.setState((state) => ({
         ...state,
-        trashList: [{ ...trash }],
+        trashList: [{ ...newTrash }],
       }));
     };
   }
