@@ -18,7 +18,7 @@ function signedRandom() {
 class Game extends Component {
   margin = 115;
   state = {
-    trashList: [this.generateTrash()],
+    trashList: [this.generateTrashState()],
     monster: {
       minY: height / 1.3,
       minX: this.margin,
@@ -26,10 +26,10 @@ class Game extends Component {
     },
   };
 
-  generateTrash() {
+  generateTrashState() {
     return {
-      velocity: { x: 200, y: 10, rotation: 0 },
-      x: 0,
+      velocity: { x: Math.random() * 200 - 100, y: 10, rotation: 0 },
+      x: Math.random() * 800,
       y: 0,
       rotation: 0,
       fixed: false,
@@ -37,6 +37,7 @@ class Game extends Component {
       maxY: height - 75,
       minX: this.margin,
       maxX: width - this.margin,
+      textureIndex: Math.floor(Math.random() * 3),
     };
   }
 
@@ -126,7 +127,7 @@ class Game extends Component {
       let deltaT = now - then;
       then = now;
 
-      let previousTrash = this.state.trashList[0]
+      let previousTrash = this.state.trashList[0];
 
       let trash = { ...previousTrash };
       this.doPhysics(trash, deltaT);
@@ -192,6 +193,17 @@ class Game extends Component {
     this.dragHappening = false;
   }
 
+  getTrashItems(array) {
+    return array.map((item) => (
+      <Trash
+        textureIndex={item.textureIndex}
+        pointerDown={this.pointerDown}
+        pointerMove={this.pointerMove}
+        pointerUp={this.pointerUp}
+        {...this.state.trashList[0]}
+      />
+    ));
+  }
   render() {
     const loader = PIXI.Loader.shared;
     const spriteAtlas = "/images/GameBackGround.json";
@@ -220,12 +232,7 @@ class Game extends Component {
           />
           <Compost {...this.props} />
           <Monster {...this.state.monster} />
-          <Trash
-            pointerDown={this.pointerDown}
-            pointerMove={this.pointerMove}
-            pointerUp={this.pointerUp}
-            {...this.state.trashList[0]}
-          />
+          <Container>{this.getTrashItems(this.state.trashList)}</Container>
         </Container>
       );
     } else {
