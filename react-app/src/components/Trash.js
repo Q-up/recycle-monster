@@ -26,6 +26,7 @@ class Trash extends Component {
         y={0}
         x={0}
         {...this.props}
+        curser='grab'
       />
     );
   }

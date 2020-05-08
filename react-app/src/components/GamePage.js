@@ -23,7 +23,11 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
-    trashList: [this.generateTrashState()],
+    trashList: [
+      this.generateTrashState(),
+      this.generateTrashState(),
+      this.generateTrashState(),
+    ],
     monster: {
       minY: height / 1.3,
       minX: this.margin,
@@ -33,7 +37,11 @@ class Game extends Component {
 
   generateTrashState() {
     return {
-      velocity: { x: signedRandom() * 200, y: signedRandom() * 200, rotation: signedRandom() * 1 },
+      velocity: {
+        x: signedRandom() * 200,
+        y: signedRandom() * 200,
+        rotation: signedRandom() * 1,
+      },
       x: signedRandom() * 200 + 0.5 * width,
       y: 0,
       rotation: 0,
@@ -48,6 +56,7 @@ class Game extends Component {
 
   constructor(props) {
     super(props);
+
     this.pointerDown = this.pointerDown.bind(this);
     this.pointerMove = this.pointerMove.bind(this);
     this.pointerUp = this.pointerUp.bind(this);
@@ -79,7 +88,7 @@ class Game extends Component {
     monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
     this.setState((state) => ({
-      ...state,
+      //...state,
       monster: { ...monster },
     }));
   };
@@ -139,8 +148,10 @@ class Game extends Component {
       then = now;
 
       this.setState((state) => ({
-        ...state,
-        trashList: this.state.trashList.map(trash => this.doPhysics(trash, deltaT)),
+        //...state,
+        trashList: this.state.trashList.map((trash) =>
+          this.doPhysics(trash, deltaT)
+        ),
       }));
     };
   }
@@ -152,11 +163,14 @@ class Game extends Component {
   dragStartObjectY = 0;
 
   pointerDown(e) {
+    console.log("e", e, "e.sprite", e.target);
+    this.selectedItem = e.target.trashItemIndex;
+    this.selectedSprite = e.target;
     this.dragStartScreenX = e.data.global.x;
     this.dragStartScreenY = e.data.global.y;
 
-    this.dragStartObjectX = this.state.trashList[0].x;
-    this.dragStartObjectY = this.state.trashList[0].y;
+    this.dragStartObjectX = this.state.trashList[this.selectedItem].x;
+    this.dragStartObjectY = this.state.trashList[this.selectedItem].y;
 
     this.dragHappening = true;
   }
@@ -166,16 +180,18 @@ class Game extends Component {
     let y = e.data.global.y;
 
     this.setState((state) => ({
-      ...state,
-      trashList: [
-        {
-          ...state.trashList[0],
-          velocity: { x: 0, y: 0, rotation: 0 },
-          fixed: true,
-          x: x - this.dragStartScreenX + this.dragStartObjectX,
-          y: y - this.dragStartScreenY + this.dragStartObjectY,
-        },
-      ],
+      // ...state,
+      trashList: this.state.trashList.map((item, i) =>
+        i !== this.selectedItem
+          ? item
+          : {
+              ...item,
+              velocity: { x: 0, y: 0, rotation: 0 },
+              fixed: true,
+              x: x - this.dragStartScreenX + this.dragStartObjectX,
+              y: y - this.dragStartScreenY + this.dragStartObjectY,
+            }
+      ),
     }));
   }
 
@@ -186,30 +202,56 @@ class Game extends Component {
   }
 
   pointerUp(e) {
+    let trashBounds = e.target.getBounds();
+    let rbBounds = this.recycleBin.getBounds;
+    let { x, y } = this.recycleBin.props;
+    let hitRecycling = this.makeBinBounds(trashBounds, x, y);
+    console.log(
+      "bounds checking",
+      trashBounds,
+      "hitRecycling",
+      hitRecycling,
+      "against",
+      x,
+      y
+    );
     this.moveToDrag(e);
-    this.setState((state) => ({
-      ...state,
-      trashList: [
-        {
-          ...state.trashList[0],
+    if (hitRecycling) {
+      this.setState(this.state.filter((item, i) => i !== e.target.targetInex));
+    } else {
+      this.setState({
+        trashList: this.state.trashList.map((item) => ({
+          ...item,
           fixed: false,
-        },
-      ],
-    }));
+        })),
+      });
+    }
     this.dragHappening = false;
   }
 
   getTrashItems(array) {
-    return array.map((item) => (
+    return array.map((item, i) => (
       <Trash
         textureIndex={item.textureIndex}
         pointerDown={this.pointerDown}
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
+        trashItemIndex={i}
+        key={i}
         {...item}
       />
     ));
   }
+
+  makeBinBounds(bounds, x, y) {
+    return (
+      x > bounds.left - 50 &&
+      x < bounds.right + 50 &&
+      y > bounds.top - 50 &&
+      y < bounds.bottom + 50
+    );
+  }
+
   render() {
     const loader = PIXI.Loader.shared;
     const spriteAtlas = "/images/GameBackGround.json";
@@ -224,23 +266,36 @@ class Game extends Component {
       const earth = sheet.textures["Earth_01.png"];
       const trash = sheet.textures["TrashBin.png"];
       const recycle = sheet.textures["RecycleBin.png"];
+      const centerAnchor = new PIXI.Point(0.5, 0.5);
 
-      return (
+      this.recycleBin = (
+        <Sprite
+          interactive
+          anchor={centerAnchor}
+          texture={recycle}
+          scale={0.4}
+          x={width / 2}
+          y={75}
+          {...this.props}
+        />
+      );
+      this.rootContainer = (
         <Container>
           <Sprite texture={earth} scale={0.33} />
-          <Sprite texture={trash} scale={0.39} x={650} y={20} {...this.props} />
           <Sprite
-            texture={recycle}
-            scale={0.4}
-            x={330}
-            y={20}
-            {...this.props}
+            anchor={centerAnchor}
+            texture={trash}
+            scale={0.39}
+            x={705}
+            y={75}
           />
+          {this.recycleBin}
           <Compost {...this.props} />
           <Monster {...this.state.monster} />
           <Container>{this.getTrashItems(this.state.trashList)}</Container>
         </Container>
       );
+      return this.rootContainer;
     } else {
       return <Sprite texture={PIXI.Texture.from(splashPage)} scale={0.2} />;
     }
