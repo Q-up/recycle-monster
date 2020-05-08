@@ -179,8 +179,7 @@ class Game extends Component {
     let x = e.data.global.x;
     let y = e.data.global.y;
 
-    this.setState((state) => ({
-      // ...state,
+    this.setState(() => ({
       trashList: this.state.trashList.map((item, i) =>
         i !== this.selectedItem
           ? item
@@ -203,25 +202,21 @@ class Game extends Component {
 
   pointerUp(e) {
     let trashBounds = e.target.getBounds();
-
+    console.log("e", e, "e.sprite", e.target);
     let { x, y } = this.recycleBin.props;
     let hitRecycling = this.makeBinBounds(trashBounds, x, y);
-    console.log(
-      "bounds checking",
-      trashBounds,
-      "hitRecycling",
-      hitRecycling,
-      "against",
-      x,
-      y
-    );
+
     this.moveToDrag(e);
+    this.dragHappening = false;
+
     if (hitRecycling) {
       this.setState({
+        ...this.state,
         trashList: this.state.trashList.filter(
-          (item, i) => i !== this.state.trashIndex
+          (item, i) => i !== e.target.trashItemIndex
         ),
       });
+      console.log("deposit", hitRecycling);
     } else {
       this.setState({
         trashList: this.state.trashList.map((item) => ({
@@ -230,7 +225,6 @@ class Game extends Component {
         })),
       });
     }
-    this.dragHappening = false;
   }
 
   getTrashItems(array) {
@@ -268,9 +262,9 @@ class Game extends Component {
       let sheet = loader.resources[spriteAtlas];
 
       const earth = sheet.textures["Earth_01.png"];
-      const trash = sheet.textures["TrashBin.png"];
-      const recycle = sheet.textures["RecycleBin.png"];
       const compost = sheet.textures["CompostBin.png"];
+      const recycle = sheet.textures["RecycleBin.png"];
+      const trash = sheet.textures["TrashBin.png"];
       const centerAnchor = new PIXI.Point(0.5, 0.5);
 
       this.compostBin = (
