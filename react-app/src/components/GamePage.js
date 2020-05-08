@@ -203,7 +203,7 @@ class Game extends Component {
 
   pointerUp(e) {
     let trashBounds = e.target.getBounds();
-    let rbBounds = this.recycleBin.getBounds;
+
     let { x, y } = this.recycleBin.props;
     let hitRecycling = this.makeBinBounds(trashBounds, x, y);
     console.log(
@@ -217,7 +217,11 @@ class Game extends Component {
     );
     this.moveToDrag(e);
     if (hitRecycling) {
-      this.setState(this.state.filter((item, i) => i !== e.target.targetInex));
+      this.setState({
+        trashList: this.state.trashList.filter(
+          (item, i) => i !== this.state.trashIndex
+        ),
+      });
     } else {
       this.setState({
         trashList: this.state.trashList.map((item) => ({
