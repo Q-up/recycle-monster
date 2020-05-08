@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
-import Compost from "./Compost";
+
 import splashPage from "./images/monster.png";
 import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
@@ -270,8 +270,20 @@ class Game extends Component {
       const earth = sheet.textures["Earth_01.png"];
       const trash = sheet.textures["TrashBin.png"];
       const recycle = sheet.textures["RecycleBin.png"];
+      const compost = sheet.textures["CompostBin.png"];
       const centerAnchor = new PIXI.Point(0.5, 0.5);
 
+      this.compostBin = (
+        <Sprite
+          interactive
+          anchor={centerAnchor}
+          texture={compost}
+          scale={0.38}
+          x={85}
+          y={75}
+          {...this.props}
+        />
+      );
       this.recycleBin = (
         <Sprite
           interactive
@@ -283,18 +295,23 @@ class Game extends Component {
           {...this.props}
         />
       );
+      this.trashBin = (
+        <Sprite
+          interactive
+          anchor={centerAnchor}
+          texture={trash}
+          scale={0.39}
+          x={705}
+          y={75}
+          {...this.props}
+        />
+      );
       this.rootContainer = (
         <Container>
           <Sprite texture={earth} scale={0.33} />
-          <Sprite
-            anchor={centerAnchor}
-            texture={trash}
-            scale={0.39}
-            x={705}
-            y={75}
-          />
+          {this.compostBin}
           {this.recycleBin}
-          <Compost {...this.props} />
+          {this.trashBin}
           <Monster {...this.state.monster} />
           <Container>{this.getTrashItems(this.state.trashList)}</Container>
         </Container>
