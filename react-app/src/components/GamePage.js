@@ -30,12 +30,18 @@ class Game extends Component {
     ],
     compostBin: {
       active: false,
+      shakeLife: 0,
+      offsetX: 0,
     },
     recycleBin: {
       active: false,
+      shakeLife: 0,
+      offsetX: 0,
     },
     trashBin: {
       active: false,
+      shakeLife: 0,
+      offsetX: 0,
     },
     monster: {
       minY: height / 1.3,
@@ -73,34 +79,46 @@ class Game extends Component {
 
   // this.props.app is given to us by withApp().
   componentDidMount() {
-    this.props.app.ticker.add(this.animateMonster);
-    this.animateTrash = this.makeTrashAnimation();
-    this.props.app.ticker.add(this.animateTrash);
+    this.props.app.ticker.add(this.makeAnimation());
+    this.trashAnimate = this.makeTrashAnimation();
+    this.props.app.ticker.add(this.trashAnimate);
   }
 
   componentWillUnmount() {
-    this.props.app.ticker.remove(this.animateMonster);
-    this.props.app.ticker.remove(this.animateTrash);
+    this.props.app.ticker.remove(this.animate);
+    this.props.app.ticker.remove(this.trashAnimate);
   }
 
-  animateMonster = (delta) => {
-    // current time in seconds with fractional milliseconds:
-    let now = new Date().getTime() / 1000.0;
+  makeAnimation() {
+    let then = currentTime();
 
-    let monster = { ...this.state.monster };
-    let spread = monster.maxX - monster.minX; // total distance, left to right
-    let middle = monster.minX + spread / 2;
-    let newX = middle + (spread / 2) * Math.sin(now / 2);
+    return (delta) => {
+      let now = currentTime();
+      let deltaT = now - then;
+      then = now;
 
-    monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      let monster = { ...this.state.monster };
+      let spread = monster.maxX - monster.minX; // total distance, left to right
+      let middle = monster.minX + spread / 2;
+      let newX = middle + (spread / 2) * Math.sin(now / 2);
 
-    monster.rotation = 0.25 * Math.sin(Math.PI * now);
+      monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
-    this.setState((state) => ({
-      //...state,
-      monster: { ...monster },
-    }));
-  };
+      let recycleBin = { ...this.state.recycleBin };
+      if (recycleBin.shakeLife > 0)
+      {
+        recycleBin.shakeLife -= deltaT;
+        recycleBin.offsetX = recycleBin.shakeLife * 50 * Math.sin(recycleBin.shakeLife * 50);
+      }
+
+      this.setState((state) => ({
+        //...state,
+        monster: { ...monster },
+        recycleBin: { ... recycleBin },
+      }));
+    }
+  }
 
   doPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
@@ -157,7 +175,7 @@ class Game extends Component {
       then = now;
 
       this.setState((state) => ({
-        //...state,
+        // ...state,
         trashList: this.state.trashList.map((trash) =>
           this.doPhysics(trash, deltaT)
         ),
@@ -196,7 +214,10 @@ class Game extends Component {
 
     this.setState(() => ({
       recycleBin: {
-        active: hitRecycling
+        ...this.state.recycleBin,
+        active: hitRecycling,
+        shakeLife: 0,
+        offsetX: 0,
       },
       trashList: this.state.trashList.map((item, i) =>
         i !== this.selectedIndex
@@ -231,7 +252,9 @@ class Game extends Component {
         this.setState({
           ...this.state,
           recycleBin: {
-            active: false
+            active: false,
+            shakeLife: 0.5, // this is actually for when the bin rejects
+            offsetX: 0,
           },
           trashList: this.state.trashList.filter(
             (item, i) => i !== this.selectedIndex
@@ -307,7 +330,7 @@ class Game extends Component {
           anchor={centerAnchor}
           texture={recycle}
           scale={0.4 * (this.state.recycleBin.active ? 1.2 : 1.0)}
-          x={width / 2}
+          x={width / 2 + this.state.recycleBin.offsetX}
           y={75}
           {...this.props}
         />
