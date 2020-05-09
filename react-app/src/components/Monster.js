@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Sprite, render } from "react-pixi-fiber";
+import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 

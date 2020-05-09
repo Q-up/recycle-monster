@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 
@@ -28,6 +28,15 @@ class Game extends Component {
       this.generateTrashState(),
       this.generateTrashState(),
     ],
+    compostBin: {
+      active: false,
+    },
+    recycleBin: {
+      active: false,
+    },
+    trashBin: {
+      active: false,
+    },
     monster: {
       minY: height / 1.3,
       minX: this.margin,
@@ -157,31 +166,40 @@ class Game extends Component {
   }
 
   dragHappening = false;
+  dragTarget = null;
   dragStartScreenX = 0;
   dragStartScreenY = 0;
   dragStartObjectX = 0;
   dragStartObjectY = 0;
 
   pointerDown(e) {
-    console.log("e", e, "e.sprite", e.target);
-    this.selectedItem = e.target.trashItemIndex;
-    this.selectedSprite = e.target;
-    this.dragStartScreenX = e.data.global.x;
-    this.dragStartScreenY = e.data.global.y;
+    if (e.target != null)
+    {
+      this.selectedIndex = e.target.trashItemIndex;
+      this.selectedSprite = e.target;
+      this.dragStartScreenX = e.data.global.x;
+      this.dragStartScreenY = e.data.global.y;
 
-    this.dragStartObjectX = this.state.trashList[this.selectedItem].x;
-    this.dragStartObjectY = this.state.trashList[this.selectedItem].y;
+      this.dragStartObjectX = this.state.trashList[this.selectedIndex].x;
+      this.dragStartObjectY = this.state.trashList[this.selectedIndex].y;
 
-    this.dragHappening = true;
+      this.dragHappening = true;
+    }
   }
 
   moveToDrag(e) {
     let x = e.data.global.x;
     let y = e.data.global.y;
 
+    let hitRecycling = this.makeBinBounds(
+      this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
+
     this.setState(() => ({
+      recycleBin: {
+        active: hitRecycling
+      },
       trashList: this.state.trashList.map((item, i) =>
-        i !== this.selectedItem
+        i !== this.selectedIndex
           ? item
           : {
               ...item,
@@ -201,29 +219,34 @@ class Game extends Component {
   }
 
   pointerUp(e) {
-    let trashBounds = e.target.getBounds();
-    console.log("e", e, "e.sprite", e.target);
-    let { x, y } = this.recycleBin.props;
-    let hitRecycling = this.makeBinBounds(trashBounds, x, y);
+    if (this.dragHappening) {
+      this.dragHappening = false;
 
-    this.moveToDrag(e);
-    this.dragHappening = false;
+      let hitRecycling = this.makeBinBounds(
+        this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
 
-    if (hitRecycling) {
-      this.setState({
-        ...this.state,
-        trashList: this.state.trashList.filter(
-          (item, i) => i !== e.target.trashItemIndex
-        ),
-      });
-      console.log("deposit", hitRecycling);
-    } else {
-      this.setState({
-        trashList: this.state.trashList.map((item) => ({
-          ...item,
-          fixed: false,
-        })),
-      });
+      this.moveToDrag(e);
+
+      if (hitRecycling) {
+        this.setState({
+          ...this.state,
+          recycleBin: {
+            active: false
+          },
+          trashList: this.state.trashList.filter(
+            (item, i) => i !== this.selectedIndex
+          ),
+        });
+      } else {
+        this.setState({
+          trashList: this.state.trashList.map((item) => ({
+            ...item,
+            fixed: false,
+          })),
+        });
+      }
+
+      this.dragTarget = null;
     }
   }
 
@@ -283,7 +306,7 @@ class Game extends Component {
           interactive
           anchor={centerAnchor}
           texture={recycle}
-          scale={0.4}
+          scale={0.4 * (this.state.recycleBin.active ? 1.2 : 1.0)}
           x={width / 2}
           y={75}
           {...this.props}
