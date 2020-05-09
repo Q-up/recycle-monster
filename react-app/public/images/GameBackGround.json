@@ -1,5 +1,4 @@
 {"frames": {
-
 "burger.png":
 {
 	"frame": {"x":82,"y":0,"w":59,"h":50},
@@ -39,6 +38,14 @@
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":25,"h":70},
 	"sourceSize": {"w":25,"h":70}
+},
+"Star.png":
+{
+	"frame": {"x":0,"y":130,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50}
 },
 "Monster_01.png":
 {

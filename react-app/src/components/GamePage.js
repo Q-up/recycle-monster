@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
+import Star from "./Star";
 
 import splashPage from "./images/monster.png";
 import { Sprite, Container } from "react-pixi-fiber";
@@ -23,6 +24,8 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
+    starList: [
+    ],
     trashList: [
       this.generateTrashState(),
       this.generateTrashState(),
@@ -34,6 +37,32 @@ class Game extends Component {
       maxX: width - this.margin,
     },
   };
+
+  generateStarState(x, y, vx, vy) {
+    return {
+      velocity: {
+        x: vx,
+        y: vy,
+        rotation: signedRandom(),
+      },
+      x: x,
+      y: y,
+      rotation: 0,
+      life: 0.5,
+    };
+  }
+
+  generatePop(x, y) {
+    let n = 20;
+    let popList = [];
+    for (var i = 0; i < n; i++)
+    {
+      let theta = Math.PI * 2 * i / n;
+      popList.push(this.generateStarState(x, y, 400 * Math.cos(theta), 400 * Math.sin(theta)));
+    }
+
+    return popList;
+  }
 
   generateTrashState() {
     return {
@@ -93,7 +122,7 @@ class Game extends Component {
     }));
   };
 
-  doPhysics(previousTrash, deltaT) {
+  doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
     if (trash.fixed) return trash;
 
@@ -139,6 +168,16 @@ class Game extends Component {
     return trash;
   }
 
+  doStarPhysics(previousStar, deltaT) {
+    let star = { ...previousStar };
+
+    star.x += deltaT * star.velocity.x;
+    star.y += deltaT * star.velocity.y;
+    star.rotation += deltaT * star.velocity.rotation;
+    star.life -= deltaT;
+    return star;
+  }
+
   makeTrashAnimation() {
     let then = currentTime();
 
@@ -150,8 +189,11 @@ class Game extends Component {
       this.setState((state) => ({
         //...state,
         trashList: this.state.trashList.map((trash) =>
-          this.doPhysics(trash, deltaT)
+          this.doTrashPhysics(trash, deltaT)
         ),
+        starList: this.state.starList.map((star) =>
+          this.doStarPhysics(star, deltaT)
+        ).filter((star) => star.life > 0),
       }));
     };
   }
@@ -163,7 +205,6 @@ class Game extends Component {
   dragStartObjectY = 0;
 
   pointerDown(e) {
-    console.log("e", e, "e.sprite", e.target);
     this.selectedItem = e.target.trashItemIndex;
     this.selectedSprite = e.target;
     this.dragStartScreenX = e.data.global.x;
@@ -215,6 +256,8 @@ class Game extends Component {
         trashList: this.state.trashList.filter(
           (item, i) => i !== e.target.trashItemIndex
         ),
+        starList: this.state.starList.concat(
+          this.generatePop(e.data.global.x, e.data.global.y))
       });
       console.log("deposit", hitRecycling);
     } else {
@@ -235,6 +278,16 @@ class Game extends Component {
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
         trashItemIndex={i}
+        key={i}
+        {...item}
+      />
+    ));
+  }
+
+  getStarItems(array) {
+    return array.map((item, i) => (
+      <Star
+        alpha={item.life}
         key={i}
         {...item}
       />
@@ -308,6 +361,7 @@ class Game extends Component {
           {this.trashBin}
           <Monster {...this.state.monster} />
           <Container>{this.getTrashItems(this.state.trashList)}</Container>
+          <Container>{this.getStarItems(this.state.starList)}</Container>
         </Container>
       );
       return this.rootContainer;
