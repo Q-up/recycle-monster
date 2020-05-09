@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Sprite, render } from "react-pixi-fiber";
+import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
@@ -19,18 +19,9 @@ class Monster extends Component {
       let step = this.state.animationStep;
       let nextStep = (step + 1) % this.monsterTextures.length;
       this.setState({ animationStep: nextStep });
-    }, 200);
+    }, 300);
   }
-  //   dude.on('pointertap', () => {
-  //     bol = !bol;
-  //     if (bol) {
-  //         dude.texture = secondTexture;
-  //     } else {
-  //         dude.texture = texture;
-  //     }
-  // });
 
-  //setTimeout(function, 1000)
   render() {
     return (
       <Sprite

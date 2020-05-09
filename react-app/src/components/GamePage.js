@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
+// import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
@@ -31,6 +31,21 @@ class Game extends Component {
       this.generateTrashState(),
       this.generateTrashState(),
     ],
+    compostBin: {
+      active: false,
+      shakeLife: 0,
+      offsetX: 0,
+    },
+    recycleBin: {
+      active: false,
+      shakeLife: 0,
+      offsetX: 0,
+    },
+    trashBin: {
+      active: false,
+      shakeLife: 0,
+      offsetX: 0,
+    },
     monster: {
       minY: height / 1.3,
       minX: this.margin,
@@ -93,7 +108,7 @@ class Game extends Component {
 
   // this.props.app is given to us by withApp().
   componentDidMount() {
-    this.props.app.ticker.add(this.animate);
+    this.props.app.ticker.add(this.makeAnimation());
     this.trashAnimate = this.makeTrashAnimation();
     this.props.app.ticker.add(this.trashAnimate);
   }
@@ -103,24 +118,36 @@ class Game extends Component {
     this.props.app.ticker.remove(this.trashAnimate);
   }
 
-  animate = (delta) => {
-    // current time in seconds with fractional milliseconds:
-    let now = new Date().getTime() / 1000.0;
+  makeAnimation() {
+    let then = currentTime();
 
-    let monster = { ...this.state.monster };
-    let spread = monster.maxX - monster.minX; // total distance, left to right
-    let middle = monster.minX + spread / 2;
-    let newX = middle + (spread / 2) * Math.sin(now / 2);
+    return (delta) => {
+      let now = currentTime();
+      let deltaT = now - then;
+      then = now;
 
-    monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      let monster = { ...this.state.monster };
+      let spread = monster.maxX - monster.minX; // total distance, left to right
+      let middle = monster.minX + spread / 2;
+      let newX = middle + (spread / 2) * Math.sin(now / 2);
 
-    monster.rotation = 0.25 * Math.sin(Math.PI * now);
+      monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
-    this.setState((state) => ({
-      //...state,
-      monster: { ...monster },
-    }));
-  };
+      let recycleBin = { ...this.state.recycleBin };
+      if (recycleBin.shakeLife > 0)
+      {
+        recycleBin.shakeLife -= deltaT;
+        recycleBin.offsetX = recycleBin.shakeLife * 50 * Math.sin(recycleBin.shakeLife * 50);
+      }
+
+      this.setState((state) => ({
+        //...state,
+        monster: { ...monster },
+        recycleBin: { ... recycleBin },
+      }));
+    }
+  }
 
   doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
@@ -187,7 +214,7 @@ class Game extends Component {
       then = now;
 
       this.setState((state) => ({
-        //...state,
+        // ...state,
         trashList: this.state.trashList.map((trash) =>
           this.doTrashPhysics(trash, deltaT)
         ),
@@ -199,30 +226,43 @@ class Game extends Component {
   }
 
   dragHappening = false;
+  dragTarget = null;
   dragStartScreenX = 0;
   dragStartScreenY = 0;
   dragStartObjectX = 0;
   dragStartObjectY = 0;
 
   pointerDown(e) {
-    this.selectedItem = e.target.trashItemIndex;
-    this.selectedSprite = e.target;
-    this.dragStartScreenX = e.data.global.x;
-    this.dragStartScreenY = e.data.global.y;
+    if (e.target != null)
+    {
+      this.selectedIndex = e.target.trashItemIndex;
+      this.selectedSprite = e.target;
+      this.dragStartScreenX = e.data.global.x;
+      this.dragStartScreenY = e.data.global.y;
 
-    this.dragStartObjectX = this.state.trashList[this.selectedItem].x;
-    this.dragStartObjectY = this.state.trashList[this.selectedItem].y;
+      this.dragStartObjectX = this.state.trashList[this.selectedIndex].x;
+      this.dragStartObjectY = this.state.trashList[this.selectedIndex].y;
 
-    this.dragHappening = true;
+      this.dragHappening = true;
+    }
   }
 
   moveToDrag(e) {
     let x = e.data.global.x;
     let y = e.data.global.y;
 
+    let hitRecycling = this.makeBinBounds(
+      this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
+
     this.setState(() => ({
+      recycleBin: {
+        ...this.state.recycleBin,
+        active: hitRecycling,
+        shakeLife: 0,
+        offsetX: 0,
+      },
       trashList: this.state.trashList.map((item, i) =>
-        i !== this.selectedItem
+        i !== this.selectedIndex
           ? item
           : {
               ...item,
@@ -242,31 +282,38 @@ class Game extends Component {
   }
 
   pointerUp(e) {
-    let trashBounds = e.target.getBounds();
-    console.log("e", e, "e.sprite", e.target);
-    let { x, y } = this.recycleBin.props;
-    let hitRecycling = this.makeBinBounds(trashBounds, x, y);
+    if (this.dragHappening) {
+      this.dragHappening = false;
 
-    this.moveToDrag(e);
-    this.dragHappening = false;
+      let hitRecycling = this.makeBinBounds(
+        this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
 
-    if (hitRecycling) {
-      this.setState({
-        ...this.state,
-        trashList: this.state.trashList.filter(
-          (item, i) => i !== e.target.trashItemIndex
-        ),
-        starList: this.state.starList.concat(
-          this.generatePop(e.data.global.x, e.data.global.y))
-      });
-      console.log("deposit", hitRecycling);
-    } else {
-      this.setState({
-        trashList: this.state.trashList.map((item) => ({
-          ...item,
-          fixed: false,
-        })),
-      });
+      this.moveToDrag(e);
+
+      if (hitRecycling) {
+        this.setState({
+          ...this.state,
+          recycleBin: {
+            active: false,
+            shakeLife: 0.5, // this is actually for when the bin rejects
+            offsetX: 0,
+          },
+          trashList: this.state.trashList.filter(
+            (item, i) => i !== this.selectedIndex
+          ),
+          starList: this.state.starList.concat(
+            this.generatePop(e.data.global.x, e.data.global.y))
+        });
+      } else {
+        this.setState({
+          trashList: this.state.trashList.map((item) => ({
+            ...item,
+            fixed: false,
+          })),
+        });
+      }
+
+      this.dragTarget = null;
     }
   }
 
@@ -336,8 +383,8 @@ class Game extends Component {
           interactive
           anchor={centerAnchor}
           texture={recycle}
-          scale={0.4}
-          x={width / 2}
+          scale={0.4 * (this.state.recycleBin.active ? 1.2 : 1.0)}
+          x={width / 2 + this.state.recycleBin.offsetX}
           y={75}
           {...this.props}
         />
