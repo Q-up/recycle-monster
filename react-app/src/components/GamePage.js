@@ -64,17 +64,17 @@ class Game extends Component {
 
   // this.props.app is given to us by withApp().
   componentDidMount() {
-    this.props.app.ticker.add(this.animate);
-    this.trashAnimate = this.makeTrashAnimation();
-    this.props.app.ticker.add(this.trashAnimate);
+    this.props.app.ticker.add(this.animateMonster);
+    this.animateTrash = this.makeTrashAnimation();
+    this.props.app.ticker.add(this.animateTrash);
   }
 
   componentWillUnmount() {
-    this.props.app.ticker.remove(this.animate);
-    this.props.app.ticker.remove(this.trashAnimate);
+    this.props.app.ticker.remove(this.animateMonster);
+    this.props.app.ticker.remove(this.animateTrash);
   }
 
-  animate = (delta) => {
+  animateMonster = (delta) => {
     // current time in seconds with fractional milliseconds:
     let now = new Date().getTime() / 1000.0;
 
