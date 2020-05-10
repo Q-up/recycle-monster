@@ -334,7 +334,7 @@ class Game extends Component {
             bins: this.state.bins.map((bin) => ({
               ...bin,
               hover: false,
-              shakeLife: 0.5, // this is actually for when the bin rejects
+              shakeLife: bin.category === selectedBin[0].category ? 0.5 : 0, // this is actually for when the bin rejects
               offsetX: 0,
             })),
             trashList: this.state.trashList.map((item) => ({
