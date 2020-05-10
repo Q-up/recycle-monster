@@ -8,6 +8,8 @@ import splashPage from "./images/monster.png";
 import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
+import trashTextures from "./TrashObj";
+
 const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;
 const width = rootDiv.width || 800;
@@ -113,14 +115,13 @@ class Game extends Component {
       maxY: height - 75,
       minX: this.margin,
       maxX: width - this.margin,
-      textureIndex: Math.floor(Math.random() * 3),
-      //category: trashTextures[this.props.textureIndex].category,
+      textureIndex: Math.floor(Math.random() * trashTextures.length),
     };
   }
 
   constructor(props) {
     super(props);
-    console.log(this.state.bins);
+
     this.pointerDown = this.pointerDown.bind(this);
     this.pointerMove = this.pointerMove.bind(this);
     this.pointerUp = this.pointerUp.bind(this);
@@ -386,14 +387,18 @@ class Game extends Component {
 
   render() {
     const loader = PIXI.Loader.shared;
-    const spriteAtlas = "/images/GameBackGround.json";
+    const backgroundAtlasPath = "/images/GameBackGround.json";
+    const trashAtlasPath = "/images/TrashAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add(spriteAtlas).load(() => undefined);
+      loader.add([
+        backgroundAtlasPath,
+        trashAtlasPath]).load(() => undefined
+      );
     }
 
     if (loader.loading === false && loader.progress === 100) {
-      let sheet = loader.resources[spriteAtlas];
+      let sheet = loader.resources[backgroundAtlasPath];
 
       const earth = sheet.textures["Earth_01.png"];
       const compost = sheet.textures["CompostBin.png"];
@@ -403,7 +408,7 @@ class Game extends Component {
 
       this.compostBin = (
         <Sprite
-          interhover
+          interactive
           anchor={centerAnchor}
           texture={compost}
           binIndex={0}
@@ -415,7 +420,7 @@ class Game extends Component {
       );
       this.recycleBin = (
         <Sprite
-          interhover
+          interactive
           anchor={centerAnchor}
           texture={recycle}
           binIndex={1}
@@ -427,7 +432,7 @@ class Game extends Component {
       );
       this.trashBin = (
         <Sprite
-          interhover
+          interactive
           anchor={centerAnchor}
           texture={trash}
           binIndex={2}

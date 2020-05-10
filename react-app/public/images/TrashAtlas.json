@@ -1,0 +1,140 @@
+{"frames": {
+
+"applecore.png":
+{
+	"frame": {"x":271,"y":74,"w":33,"h":45},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":7,"w":33,"h":45},
+	"sourceSize": {"w":60,"h":60}
+},
+"beerbottle.png":
+{
+	"frame": {"x":1,"y":1,"w":29,"h":106},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":29,"h":106},
+	"sourceSize": {"w":36,"h":110}
+},
+"burger.png":
+{
+	"frame": {"x":380,"y":64,"w":57,"h":49},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":2,"w":57,"h":49},
+	"sourceSize": {"w":58,"h":53}
+},
+"can.png":
+{
+	"frame": {"x":431,"y":1,"w":30,"h":48},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":30,"h":48},
+	"sourceSize": {"w":36,"h":53}
+},
+"clamshellbox.png":
+{
+	"frame": {"x":318,"y":71,"w":60,"h":46},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":0,"w":60,"h":46},
+	"sourceSize": {"w":65,"h":46}
+},
+"crumpledpaper.png":
+{
+	"frame": {"x":226,"y":74,"w":43,"h":43},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":3,"w":43,"h":43},
+	"sourceSize": {"w":46,"h":48}
+},
+"fijibottle.png":
+{
+	"frame": {"x":277,"y":1,"w":27,"h":71},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":1,"w":27,"h":71},
+	"sourceSize": {"w":31,"h":75}
+},
+"grass.png":
+{
+	"frame": {"x":369,"y":1,"w":61,"h":60},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":61,"h":60},
+	"sourceSize": {"w":61,"h":60}
+},
+"leaves2.png":
+{
+	"frame": {"x":109,"y":1,"w":75,"h":54},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":2,"w":75,"h":54},
+	"sourceSize": {"w":75,"h":57}
+},
+"lumber.png":
+{
+	"frame": {"x":219,"y":1,"w":71,"h":56},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":1,"w":71,"h":56},
+	"sourceSize": {"w":74,"h":59}
+},
+"milkcarton.png":
+{
+	"frame": {"x":74,"y":1,"w":33,"h":80},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":1,"y":1,"w":33,"h":80},
+	"sourceSize": {"w":36,"h":82}
+},
+"pizzabox.png":
+{
+	"frame": {"x":74,"y":83,"w":77,"h":35},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":3,"w":77,"h":35},
+	"sourceSize": {"w":84,"h":40}
+},
+"plasticbag.png":
+{
+	"frame": {"x":165,"y":1,"w":52,"h":72},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":3,"y":2,"w":52,"h":72},
+	"sourceSize": {"w":55,"h":77}
+},
+"rubbergloves.png":
+{
+	"frame": {"x":306,"y":1,"w":68,"h":61},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":68,"h":61},
+	"sourceSize": {"w":69,"h":61}
+},
+"sawdust.png":
+{
+	"frame": {"x":153,"y":78,"w":71,"h":37},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":4,"y":1,"w":71,"h":37},
+	"sourceSize": {"w":76,"h":39}
+},
+"twigs.png":
+{
+	"frame": {"x":32,"y":1,"w":101,"h":40},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":2,"y":3,"w":101,"h":40},
+	"sourceSize": {"w":104,"h":44}
+}},
+"animations": {
+},
+"meta": {
+	"version": "1.0",
+	"image": "TrashAtlas.png",
+	"format": "RGBA8888",
+	"size": {"w":462,"h":119},
+	"scale": "1"
+}
+}
