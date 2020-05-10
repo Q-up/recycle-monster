@@ -24,8 +24,7 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
-    starList: [
-    ],
+    starList: [],
     trashList: [
       this.generateTrashState(),
       this.generateTrashState(),
@@ -35,16 +34,19 @@ class Game extends Component {
       active: false,
       shakeLife: 0,
       offsetX: 0,
+      category: "compost",
     },
     recycleBin: {
       active: false,
       shakeLife: 0,
       offsetX: 0,
+      category: "recycle",
     },
     trashBin: {
       active: false,
       shakeLife: 0,
       offsetX: 0,
+      category: "trash",
     },
     monster: {
       minY: height / 1.3,
@@ -70,10 +72,16 @@ class Game extends Component {
   generatePop(x, y) {
     let n = 20;
     let popList = [];
-    for (var i = 0; i < n; i++)
-    {
-      let theta = Math.PI * 2 * i / n;
-      popList.push(this.generateStarState(x, y, 400 * Math.cos(theta), 400 * Math.sin(theta)));
+    for (var i = 0; i < n; i++) {
+      let theta = (Math.PI * 2 * i) / n;
+      popList.push(
+        this.generateStarState(
+          x,
+          y,
+          400 * Math.cos(theta),
+          400 * Math.sin(theta)
+        )
+      );
     }
 
     return popList;
@@ -95,6 +103,7 @@ class Game extends Component {
       minX: this.margin,
       maxX: width - this.margin,
       textureIndex: Math.floor(Math.random() * 3),
+      //category: trashTextures[this.props.textureIndex].category,
     };
   }
 
@@ -135,18 +144,18 @@ class Game extends Component {
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
       let recycleBin = { ...this.state.recycleBin };
-      if (recycleBin.shakeLife > 0)
-      {
+      if (recycleBin.shakeLife > 0) {
         recycleBin.shakeLife -= deltaT;
-        recycleBin.offsetX = recycleBin.shakeLife * 50 * Math.sin(recycleBin.shakeLife * 50);
+        recycleBin.offsetX =
+          recycleBin.shakeLife * 50 * Math.sin(recycleBin.shakeLife * 50);
       }
 
       this.setState((state) => ({
         //...state,
         monster: { ...monster },
-        recycleBin: { ... recycleBin },
+        recycleBin: { ...recycleBin },
       }));
-    }
+    };
   }
 
   doTrashPhysics(previousTrash, deltaT) {
@@ -218,9 +227,9 @@ class Game extends Component {
         trashList: this.state.trashList.map((trash) =>
           this.doTrashPhysics(trash, deltaT)
         ),
-        starList: this.state.starList.map((star) =>
-          this.doStarPhysics(star, deltaT)
-        ).filter((star) => star.life > 0),
+        starList: this.state.starList
+          .map((star) => this.doStarPhysics(star, deltaT))
+          .filter((star) => star.life > 0),
       }));
     };
   }
@@ -233,8 +242,7 @@ class Game extends Component {
   dragStartObjectY = 0;
 
   pointerDown(e) {
-    if (e.target != null)
-    {
+    if (e.target != null) {
       this.selectedIndex = e.target.trashItemIndex;
       this.selectedSprite = e.target;
       this.dragStartScreenX = e.data.global.x;
@@ -252,7 +260,10 @@ class Game extends Component {
     let y = e.data.global.y;
 
     let hitRecycling = this.makeBinBounds(
-      this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
+      this.selectedSprite.getBounds(),
+      this.recycleBin.props.x,
+      this.recycleBin.props.y
+    );
 
     this.setState(() => ({
       recycleBin: {
@@ -282,15 +293,19 @@ class Game extends Component {
   }
 
   pointerUp(e) {
+    console.log(e.target.category);
     if (this.dragHappening) {
       this.dragHappening = false;
 
       let hitRecycling = this.makeBinBounds(
-        this.selectedSprite.getBounds(), this.recycleBin.props.x, this.recycleBin.props.y);
+        this.selectedSprite.getBounds(),
+        this.recycleBin.props.x,
+        this.recycleBin.props.y
+      );
 
       this.moveToDrag(e);
 
-      if (hitRecycling) {
+      if (hitRecycling && e.target.category === "recycle") {
         this.setState({
           ...this.state,
           recycleBin: {
@@ -302,7 +317,8 @@ class Game extends Component {
             (item, i) => i !== this.selectedIndex
           ),
           starList: this.state.starList.concat(
-            this.generatePop(e.data.global.x, e.data.global.y))
+            this.generatePop(e.data.global.x, e.data.global.y)
+          ),
         });
       } else {
         this.setState({
@@ -325,6 +341,7 @@ class Game extends Component {
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
         trashItemIndex={i}
+        //category={}
         key={i}
         {...item}
       />
@@ -332,13 +349,7 @@ class Game extends Component {
   }
 
   getStarItems(array) {
-    return array.map((item, i) => (
-      <Star
-        alpha={item.life}
-        key={i}
-        {...item}
-      />
-    ));
+    return array.map((item, i) => <Star alpha={item.life} key={i} {...item} />);
   }
 
   makeBinBounds(bounds, x, y) {
