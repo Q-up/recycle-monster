@@ -27,11 +27,7 @@ class Game extends Component {
   margin = 115;
   state = {
     starList: [],
-    trashList: [
-      this.generateTrashState(),
-      this.generateTrashState(),
-      this.generateTrashState(),
-    ],
+    trashList: [this.generateTrashState()],
     bins: [
       {
         category: "compost",
@@ -306,13 +302,10 @@ class Game extends Component {
   pointerUp(e) {
     if (this.dragHappening) {
       this.dragHappening = false;
-      console.log("trash items", e.target.category);
       let selectedBin = this.state.bins.filter((bin) =>
         this.isSpriteInBin(this.selectedSprite.getBounds(), bin.x, bin.y)
       );
-      //is this a bin?
-      //is this a correct bin?
-      //if
+
       this.moveToDrag(e);
       if (selectedBin.length === 1) {
         if (e.target.category === selectedBin[0].category) {
@@ -391,10 +384,7 @@ class Game extends Component {
     const trashAtlasPath = "/images/TrashAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add([
-        backgroundAtlasPath,
-        trashAtlasPath]).load(() => undefined
-      );
+      loader.add([backgroundAtlasPath, trashAtlasPath]).load(() => undefined);
     }
 
     if (loader.loading === false && loader.progress === 100) {

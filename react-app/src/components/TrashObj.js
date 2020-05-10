@@ -1,67 +1,66 @@
 export default [
-    {
-        image: "applecore.png",
-        category: "garbage",
-    },
-    {
-        image: "beerbottle.png",
-        category: "garbage",
-    },
-    {
-        image: "burger.png",
-        category: "garbage",
-    },
-    {
-        image: "can.png",
-        category: "garbage",
-    },
-    {
-        image: "clamshellbox.png",
-        category: "garbage",
-    },
-    {
-        image: "crumpledpaper.png",
-        category: "garbage",
-    },
-    {
-        image: "fijibottle.png",
-        category: "garbage",
-    },
-    {
-        image: "grass.png",
-        category: "garbage",
-    },
-    {
-        image: "leaves2.png",
-        category: "garbage",
-    },
-    {
-        image: "lumber.png",
-        category: "garbage",
-    },
-    {
-        image: "milkcarton.png",
-        category: "garbage",
-    },
-    {
-        image: "pizzabox.png",
-        category: "garbage",
-    },
-    {
-        image: "plasticbag.png",
-        category: "garbage",
-    },
-    {
-        image: "rubbergloves.png",
-        category: "garbage",
-    },
-    {
-        image: "sawdust.png",
-        category: "garbage",
-    },
-    {
-        image: "twigs.png",
-        category: "garbage",
-    }
+  {
+    image: "applecore.png",
+    category: "compost",
+  },
+  {
+    image: "beerbottle.png",
+    category: "recycle",
+  },
+  {
+    image: "burger.png",
+    category: "compost",
+  },
+  {
+    image: "can.png",
+    category: "recycle",
+  },
+  {
+    image: "clamshellbox.png",
+    category: "recycle",
+  },
+  {
+    image: "crumpledpaper.png",
+    category: "compost",
+  },
+  {
+    image: "fijibottle.png",
+    category: "recycle",
+  },
+  {
+    image: "grass.png",
+    category: "compost",
+  },
+  {
+    image: "leaves2.png",
+    category: "compost",
+  },
+  {
+    image: "lumber.png",
+    category: "compost",
+  },
+  {
+    image: "milkcarton.png",
+    category: "recycle",
+  },
+  {
+    image: "pizzabox.png",
+    category: "compost",
+  },
+  {
+    image: "plasticbag.png",
+    category: "garbage",
+  },
+  {
+    image: "rubbergloves.png",
+    category: "garbage",
+  },
+  {
+    image: "sawdust.png",
+    category: "compost",
+  },
+  {
+    image: "twigs.png",
+    category: "compost",
+  },
 ];
-
