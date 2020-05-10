@@ -8,8 +8,7 @@ const centerAnchor = new PIXI.Point(0.5, 0.5);
 class Trash extends Component {
   render() {
     const loader = PIXI.Loader.shared;
-    const spriteAtlas = "/images/GameBackGround.json";
-    const sheet = loader.resources[spriteAtlas];
+    const sheet = loader.resources["/images/TrashAtlas.json"];
 
     return (
       <Sprite
@@ -20,7 +19,7 @@ class Trash extends Component {
         texture={sheet.textures[trashTextures[this.props.textureIndex].image]}
         category={trashTextures[this.props.textureIndex].category}
         anchor={centerAnchor}
-        scale={0.4}
+        scale={1}
         y={0}
         x={0}
         {...this.props}

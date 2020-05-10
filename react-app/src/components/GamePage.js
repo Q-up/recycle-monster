@@ -7,6 +7,8 @@ import splashPage from "./images/monster.png";
 import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
+import trashTextures from "./TrashObj";
+
 const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;
 const width = rootDiv.width || 800;
@@ -65,7 +67,7 @@ class Game extends Component {
       maxY: height - 75,
       minX: this.margin,
       maxX: width - this.margin,
-      textureIndex: Math.floor(Math.random() * 3),
+      textureIndex: Math.floor(Math.random() * trashTextures.length),
     };
   }
 
@@ -298,14 +300,18 @@ class Game extends Component {
 
   render() {
     const loader = PIXI.Loader.shared;
-    const spriteAtlas = "/images/GameBackGround.json";
+    const backgroundAtlasPath = "/images/GameBackGround.json";
+    const trashAtlasPath = "/images/TrashAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add(spriteAtlas).load(() => undefined);
+      loader.add([
+        backgroundAtlasPath,
+        trashAtlasPath]).load(() => undefined
+      );
     }
 
     if (loader.loading === false && loader.progress === 100) {
-      let sheet = loader.resources[spriteAtlas];
+      let sheet = loader.resources[backgroundAtlasPath];
 
       const earth = sheet.textures["Earth_01.png"];
       const compost = sheet.textures["CompostBin.png"];
