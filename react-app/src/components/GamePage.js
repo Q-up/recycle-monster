@@ -50,7 +50,7 @@ class Game extends Component {
         y: 75,
       },
       {
-        category: "trash",
+        category: "garbage",
         hover: false,
         shakeLife: 0,
         offsetX: 0,
@@ -305,40 +305,47 @@ class Game extends Component {
   pointerUp(e) {
     if (this.dragHappening) {
       this.dragHappening = false;
-
+      console.log("trash items", e.target.category);
       let selectedBin = this.state.bins.filter((bin) =>
         this.isSpriteInBin(this.selectedSprite.getBounds(), bin.x, bin.y)
       );
-
+      //is this a bin?
+      //is this a correct bin?
+      //if
       this.moveToDrag(e);
-      console.log("selected Bin", selectedBin);
-      console.log(this.state.bins);
-      if (
-        selectedBin.length === 1 &&
-        e.target.category === selectedBin[0].category
-      ) {
-        this.setState({
-          ...this.state,
-          bins: this.state.bins.map((bin) => ({
-            ...bin,
-            hover: false,
-          })),
-          trashList: this.state.trashList.filter(
-            (item, i) => i !== this.selectedIndex
-          ),
-          starList: this.state.starList.concat(
-            this.generatePop(e.data.global.x, e.data.global.y)
-          ),
-        });
+      if (selectedBin.length === 1) {
+        if (e.target.category === selectedBin[0].category) {
+          this.setState({
+            ...this.state,
+            bins: this.state.bins.map((bin) => ({
+              ...bin,
+              hover: false,
+            })),
+            trashList: this.state.trashList.filter(
+              (item, i) => i !== this.selectedIndex
+            ),
+            starList: this.state.starList.concat(
+              this.generatePop(e.data.global.x, e.data.global.y)
+            ),
+          });
+        } else {
+          this.setState({
+            ...this.state,
+            bins: this.state.bins.map((bin) => ({
+              ...bin,
+              hover: false,
+              shakeLife: 0.5, // this is actually for when the bin rejects
+              offsetX: 0,
+            })),
+            trashList: this.state.trashList.map((item) => ({
+              ...item,
+              fixed: false,
+            })),
+          });
+        }
       } else {
         this.setState({
           ...this.state,
-          bins: this.state.bins.map((bin) => ({
-            ...bin,
-            hover: false,
-            shakeLife: 0.5, // this is actually for when the bin rejects
-            offsetX: 0,
-          })),
           trashList: this.state.trashList.map((item) => ({
             ...item,
             fixed: false,
