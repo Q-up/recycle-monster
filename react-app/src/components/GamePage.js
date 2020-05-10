@@ -310,7 +310,6 @@ class Game extends Component {
           ...this.state,
           recycleBin: {
             active: false,
-            shakeLife: 0.5, // this is actually for when the bin rejects
             offsetX: 0,
           },
           trashList: this.state.trashList.filter(
@@ -322,6 +321,12 @@ class Game extends Component {
         });
       } else {
         this.setState({
+          ...this.state,
+          recycleBin: {
+            active: false,
+            shakeLife: 0.5, // this is actually for when the bin rejects
+            offsetX: 0,
+          },
           trashList: this.state.trashList.map((item) => ({
             ...item,
             fixed: false,
