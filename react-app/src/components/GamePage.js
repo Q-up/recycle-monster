@@ -30,24 +30,35 @@ class Game extends Component {
       this.generateTrashState(),
       this.generateTrashState(),
     ],
-    compostBin: {
-      active: false,
-      shakeLife: 0,
-      offsetX: 0,
-      category: "compost",
-    },
-    recycleBin: {
-      active: false,
-      shakeLife: 0,
-      offsetX: 0,
-      category: "recycle",
-    },
-    trashBin: {
-      active: false,
-      shakeLife: 0,
-      offsetX: 0,
-      category: "trash",
-    },
+    bins: [
+      {
+        category: "compost",
+        hover: false,
+        shakeLife: 0,
+        offsetX: 0,
+        scale: 0.38,
+        x: 85,
+        y: 75,
+      },
+      {
+        category: "recycle",
+        hover: false,
+        shakeLife: 0,
+        offsetX: 0,
+        scale: 0.4,
+        x: width / 2,
+        y: 75,
+      },
+      {
+        category: "trash",
+        hover: false,
+        shakeLife: 0,
+        offsetX: 0,
+        scale: 0.39,
+        x: 705,
+        y: 75,
+      },
+    ],
     monster: {
       minY: height / 1.3,
       minX: this.margin,
@@ -109,7 +120,7 @@ class Game extends Component {
 
   constructor(props) {
     super(props);
-
+    console.log(this.state.bins);
     this.pointerDown = this.pointerDown.bind(this);
     this.pointerMove = this.pointerMove.bind(this);
     this.pointerUp = this.pointerUp.bind(this);
@@ -129,7 +140,6 @@ class Game extends Component {
 
   makeAnimation() {
     let then = currentTime();
-
     return (delta) => {
       let now = currentTime();
       let deltaT = now - then;
@@ -143,17 +153,20 @@ class Game extends Component {
       monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
-      let recycleBin = { ...this.state.recycleBin };
-      if (recycleBin.shakeLife > 0) {
-        recycleBin.shakeLife -= deltaT;
-        recycleBin.offsetX =
-          recycleBin.shakeLife * 50 * Math.sin(recycleBin.shakeLife * 50);
-      }
-
       this.setState((state) => ({
-        //...state,
+        ...state,
         monster: { ...monster },
-        recycleBin: { ...recycleBin },
+        bins: this.state.bins.map((bin) => {
+          if (bin.shakeLife > 0) {
+            return {
+              ...bin,
+              shakeLife: bin.shakeLife - deltaT,
+              offsetX: bin.shakeLife * 50 * Math.sin(bin.shakeLife * 50),
+            };
+          } else {
+            return bin;
+          }
+        }),
       }));
     };
   }
@@ -200,7 +213,6 @@ class Game extends Component {
         trash.velocity.rotation += signedRandom() * mag;
       }
     }
-
     return trash;
   }
 
@@ -223,7 +235,7 @@ class Game extends Component {
       then = now;
 
       this.setState((state) => ({
-        // ...state,
+        ...state,
         trashList: this.state.trashList.map((trash) =>
           this.doTrashPhysics(trash, deltaT)
         ),
@@ -259,19 +271,17 @@ class Game extends Component {
     let x = e.data.global.x;
     let y = e.data.global.y;
 
-    let hitRecycling = this.makeBinBounds(
-      this.selectedSprite.getBounds(),
-      this.recycleBin.props.x,
-      this.recycleBin.props.y
-    );
-
     this.setState(() => ({
-      recycleBin: {
-        ...this.state.recycleBin,
-        active: hitRecycling,
+      bins: this.state.bins.map((bin) => ({
+        ...bin,
+        hover: this.isSpriteInBin(
+          this.selectedSprite.getBounds(),
+          bin.x,
+          bin.y
+        ),
         shakeLife: 0,
         offsetX: 0,
-      },
+      })),
       trashList: this.state.trashList.map((item, i) =>
         i !== this.selectedIndex
           ? item
@@ -293,25 +303,26 @@ class Game extends Component {
   }
 
   pointerUp(e) {
-    console.log(e.target.category);
     if (this.dragHappening) {
       this.dragHappening = false;
 
-      let hitRecycling = this.makeBinBounds(
-        this.selectedSprite.getBounds(),
-        this.recycleBin.props.x,
-        this.recycleBin.props.y
+      let selectedBin = this.state.bins.filter((bin) =>
+        this.isSpriteInBin(this.selectedSprite.getBounds(), bin.x, bin.y)
       );
 
       this.moveToDrag(e);
-
-      if (hitRecycling && e.target.category === "recycle") {
+      console.log("selected Bin", selectedBin);
+      console.log(this.state.bins);
+      if (
+        selectedBin.length === 1 &&
+        e.target.category === selectedBin[0].category
+      ) {
         this.setState({
           ...this.state,
-          recycleBin: {
-            active: false,
-            offsetX: 0,
-          },
+          bins: this.state.bins.map((bin) => ({
+            ...bin,
+            hover: false,
+          })),
           trashList: this.state.trashList.filter(
             (item, i) => i !== this.selectedIndex
           ),
@@ -322,11 +333,12 @@ class Game extends Component {
       } else {
         this.setState({
           ...this.state,
-          recycleBin: {
-            active: false,
+          bins: this.state.bins.map((bin) => ({
+            ...bin,
+            hover: false,
             shakeLife: 0.5, // this is actually for when the bin rejects
             offsetX: 0,
-          },
+          })),
           trashList: this.state.trashList.map((item) => ({
             ...item,
             fixed: false,
@@ -346,7 +358,6 @@ class Game extends Component {
         pointerMove={this.pointerMove}
         pointerUp={this.pointerUp}
         trashItemIndex={i}
-        //category={}
         key={i}
         {...item}
       />
@@ -357,7 +368,7 @@ class Game extends Component {
     return array.map((item, i) => <Star alpha={item.life} key={i} {...item} />);
   }
 
-  makeBinBounds(bounds, x, y) {
+  isSpriteInBin(bounds, x, y) {
     return (
       x > bounds.left - 50 &&
       x < bounds.right + 50 &&
@@ -385,33 +396,36 @@ class Game extends Component {
 
       this.compostBin = (
         <Sprite
-          interactive
+          interhover
           anchor={centerAnchor}
           texture={compost}
-          scale={0.38}
-          x={85}
+          binIndex={0}
+          scale={0.38 * (this.state.bins[0].hover ? 1.2 : 1.0)}
+          x={85 + this.state.bins[0].offsetX}
           y={75}
           {...this.props}
         />
       );
       this.recycleBin = (
         <Sprite
-          interactive
+          interhover
           anchor={centerAnchor}
           texture={recycle}
-          scale={0.4 * (this.state.recycleBin.active ? 1.2 : 1.0)}
-          x={width / 2 + this.state.recycleBin.offsetX}
+          binIndex={1}
+          scale={0.4 * (this.state.bins[1].hover ? 1.2 : 1.0)}
+          x={width / 2 + this.state.bins[1].offsetX}
           y={75}
           {...this.props}
         />
       );
       this.trashBin = (
         <Sprite
-          interactive
+          interhover
           anchor={centerAnchor}
           texture={trash}
-          scale={0.39}
-          x={705}
+          binIndex={2}
+          scale={0.39 * (this.state.bins[2].hover ? 1.2 : 1.0)}
+          x={705 + this.state.bins[2].offsetX}
           y={75}
           {...this.props}
         />
