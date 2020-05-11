@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-// import { Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
 
-import splashPage from "./images/monster.png";
-import { Sprite, Container } from "react-pixi-fiber";
+import { Sprite, Container, Text } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
 import trashTextures from "./TrashObj";
@@ -27,6 +26,7 @@ class Game extends Component {
   margin = 115;
   state = {
     pollution: 0,
+    startGame: false,
     starList: [],
     trashList: [this.generateTrashState()],
     bins: [
@@ -71,6 +71,10 @@ class Game extends Component {
       extraScale: 1.0,
     },
   };
+
+  // handleClick = () => {
+  //   this.setState((state) => ({ ...state, scale: state.scale * 1.25 }));
+  // };
 
   generateStarState(x, y, vx, vy) {
     return {
@@ -252,8 +256,7 @@ class Game extends Component {
     trash.velocity.y += 10; // gravity
 
     // Clamp to the invisible side-walls, and bounce off them
-    if (trash.x > trash.maxX)
-    {
+    if (trash.x > trash.maxX) {
       if (trash.velocity.x > 0) {
         trash.velocity.x *= -1;
       }
@@ -463,75 +466,64 @@ class Game extends Component {
   render() {
     const loader = PIXI.Loader.shared;
     const backgroundAtlasPath = "/images/GameBackGround.json";
-    const trashAtlasPath = "/images/TrashAtlas.json";
-    const monsterAtlasPath = "/images/MonsterAtlas.json";
+    let sheet = loader.resources[backgroundAtlasPath];
 
-    if (Object.keys(loader.resources).length === 0) {
-      loader.add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath]).load(() => undefined);
-    }
+    const earth1 = sheet.textures["Earth_01.png"];
+    const earth2 = sheet.textures["Earth_02.png"];
+    const compost = sheet.textures["CompostBin.png"];
+    const recycle = sheet.textures["RecycleBin.png"];
+    const trash = sheet.textures["TrashBin.png"];
+    const centerAnchor = new PIXI.Point(0.5, 0.5);
 
-    if (loader.loading === false && loader.progress === 100) {
-      let sheet = loader.resources[backgroundAtlasPath];
-
-      const earth1 = sheet.textures["Earth_01.png"];
-      const earth2 = sheet.textures["Earth_02.png"];
-      const compost = sheet.textures["CompostBin.png"];
-      const recycle = sheet.textures["RecycleBin.png"];
-      const trash = sheet.textures["TrashBin.png"];
-      const centerAnchor = new PIXI.Point(0.5, 0.5);
-
-      this.compostBin = (
-        <Sprite
-          interactive
-          anchor={centerAnchor}
-          texture={compost}
-          binIndex={0}
-          scale={0.38 * (this.state.bins[0].hover ? 1.2 : 1.0)}
-          x={85 + this.state.bins[0].offsetX}
-          y={75}
-          {...this.props}
-        />
-      );
-      this.recycleBin = (
-        <Sprite
-          interactive
-          anchor={centerAnchor}
-          texture={recycle}
-          binIndex={1}
-          scale={0.4 * (this.state.bins[1].hover ? 1.2 : 1.0)}
-          x={width / 2 + this.state.bins[1].offsetX}
-          y={75}
-          {...this.props}
-        />
-      );
-      this.trashBin = (
-        <Sprite
-          interactive
-          anchor={centerAnchor}
-          texture={trash}
-          binIndex={2}
-          scale={0.39 * (this.state.bins[2].hover ? 1.2 : 1.0)}
-          x={705 + this.state.bins[2].offsetX}
-          y={75}
-          {...this.props}
-        />
-      );
-      this.rootContainer = (
-        <Container>
-          <Sprite texture={earth1} scale={1/3} />
-          <Sprite alpha={this.state.pollution} texture={earth2} scale={1/3} />
-          {this.compostBin}
-          {this.recycleBin}
-          {this.trashBin}
-          <Monster {...this.state.monster} />
-          <Container>{this.getTrashItems(this.state.trashList)}</Container>
-          <Container>{this.getStarItems(this.state.starList)}</Container>
-        </Container>
-      );
-      return this.rootContainer;
-    } else {
-      return <Sprite texture={PIXI.Texture.from(splashPage)} scale={0.2} />;
-    }
+    this.compostBin = (
+      <Sprite
+        interactive
+        anchor={centerAnchor}
+        texture={compost}
+        binIndex={0}
+        scale={0.38 * (this.state.bins[0].hover ? 1.2 : 1.0)}
+        x={85 + this.state.bins[0].offsetX}
+        y={75}
+        {...this.props}
+      />
+    );
+    this.recycleBin = (
+      <Sprite
+        interactive
+        anchor={centerAnchor}
+        texture={recycle}
+        binIndex={1}
+        scale={0.4 * (this.state.bins[1].hover ? 1.2 : 1.0)}
+        x={width / 2 + this.state.bins[1].offsetX}
+        y={75}
+        {...this.props}
+      />
+    );
+    this.trashBin = (
+      <Sprite
+        interactive
+        anchor={centerAnchor}
+        texture={trash}
+        binIndex={2}
+        scale={0.39 * (this.state.bins[2].hover ? 1.2 : 1.0)}
+        x={705 + this.state.bins[2].offsetX}
+        y={75}
+        {...this.props}
+      />
+    );
+    this.rootContainer = (
+      <Container>
+        <Sprite texture={earth} scale={1/3} />
+        <Sprite alpha={this.state.pollution} texture={earth2} scale={1/3} />
+        {this.compostBin}
+        {this.recycleBin}
+        {this.trashBin}
+        <Monster {...this.state.monster} />
+        <Container>{this.getTrashItems(this.state.trashList)}</Container>
+        <Container>{this.getStarItems(this.state.starList)}</Container>
+      </Container>
+    );
+    return this.rootContainer;
   }
 }
 
