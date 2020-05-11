@@ -489,10 +489,20 @@ class Game extends Component {
       );
       return this.rootContainer;
     } else {
+      const style = {
+        dropShadow: true,
+        fill: ["#f9970a", "#4d103b"],
+        fontFamily: '"Comic Sans MS", cursive, sans-serif',
+        fontSize: 72,
+        fontVariant: "small-caps",
+        fontWeight: "bolder",
+        letterSpacing: 10,
+        strokeThickness: 15,
+      };
       return (
         <Container>
-          <Text text='Recycle Monster' scale={3} />
-          <Text text='click to play' scale={1} y={200} />
+          <Text text='Recycle Monster' style={style} />
+          <Text text='click to play' style={style} scale={0.5} y={200} />
           <SplashPage
             interactive
             buttonMode
