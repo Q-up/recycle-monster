@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-
+import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
 import SplashPage from "./SplashPage";
 
-import { Sprite, Container } from "react-pixi-fiber";
+import { Sprite, Container, Text } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
 import trashTextures from "./TrashObj";
@@ -26,6 +26,7 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
+    startGame: false,
     starList: [],
     trashList: [this.generateTrashState()],
     bins: [
@@ -65,6 +66,18 @@ class Game extends Component {
       y: 0,
     },
   };
+
+  startGame() {
+    console.log("start Game");
+    this.setState({
+      ...this.state,
+      startGame: true,
+    });
+  }
+
+  // handleClick = () => {
+  //   this.setState((state) => ({ ...state, scale: state.scale * 1.25 }));
+  // };
 
   generateStarState(x, y, vx, vy) {
     return {
@@ -123,6 +136,7 @@ class Game extends Component {
     this.pointerDown = this.pointerDown.bind(this);
     this.pointerMove = this.pointerMove.bind(this);
     this.pointerUp = this.pointerUp.bind(this);
+    this.startGame = this.startGame.bind(this);
   }
 
   // this.props.app is given to us by withApp().
@@ -413,7 +427,11 @@ class Game extends Component {
         .load(() => undefined);
     }
 
-    if (loader.loading === false && loader.progress === 100) {
+    if (
+      loader.loading === false &&
+      loader.progress === 100 &&
+      this.state.startGame === true
+    ) {
       let sheet = loader.resources[backgroundAtlasPath];
 
       const earth = sheet.textures["Earth_01.png"];
@@ -471,7 +489,17 @@ class Game extends Component {
       );
       return this.rootContainer;
     } else {
-      return <SplashPage></SplashPage>;
+      return (
+        <Container>
+          <Text text='Recycle Monster' scale={3} />
+          <Text text='click to play' scale={1} y={200} />
+          <SplashPage
+            interactive
+            buttonMode
+            pointerdown={this.startGame}
+          ></SplashPage>
+        </Container>
+      );
     }
   }
 }
