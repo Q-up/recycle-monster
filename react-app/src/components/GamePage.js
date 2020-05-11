@@ -149,14 +149,13 @@ class Game extends Component {
 
       monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
-      //when monster.x === trash.x filter trash
-      // console.log("monster x", monster.x);
-      // console.log("trash x", this.state.trashList[0].x);
+
       this.setState((state) => ({
         ...state,
         monster: { ...monster },
         trashList: this.state.trashList.filter(
-          (trash) => !trash.x < monster.x + 30 && trash.x > monster.x
+          // when monster.x is close to trash.x filter trash...
+          (trash) => trash.fixed || !(trash.x < monster.x + 30 && trash.x > monster.x)
         ),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
