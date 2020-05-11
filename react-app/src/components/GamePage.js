@@ -354,9 +354,7 @@ class Game extends Component {
       bins: this.state.bins.map((bin) => ({
         ...bin,
         hover: this.isSpriteInBin(
-          this.selectedSprite.getBounds(),
-          bin.x,
-          bin.y
+          x, y, bin.x, bin.y
         ),
         shakeLife: 0,
         offsetX: 0,
@@ -382,10 +380,13 @@ class Game extends Component {
   }
 
   pointerUp(e) {
+    let x = e.data.global.x;
+    let y = e.data.global.y;
+
     if (this.dragHappening) {
       this.dragHappening = false;
       let selectedBin = this.state.bins.filter((bin) =>
-        this.isSpriteInBin(this.selectedSprite.getBounds(), bin.x, bin.y)
+        this.isSpriteInBin(x, y, bin.x, bin.y)
       );
 
       this.moveToDrag(e);
@@ -451,12 +452,12 @@ class Game extends Component {
     return array.map((item, i) => <Star alpha={item.life} key={i} {...item} />);
   }
 
-  isSpriteInBin(bounds, x, y) {
+  isSpriteInBin(x, y, binx, biny) {
     return (
-      x > bounds.left - 50 &&
-      x < bounds.right + 50 &&
-      y > bounds.top - 50 &&
-      y < bounds.bottom + 50
+      binx > x - 50 &&
+      binx < x + 50 &&
+      biny > y - 50 &&
+      biny < y + 50
     );
   }
 
