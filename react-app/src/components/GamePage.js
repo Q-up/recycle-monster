@@ -61,6 +61,8 @@ class Game extends Component {
       minY: height / 1.3,
       minX: this.margin,
       maxX: width - this.margin,
+      x: 0,
+      y: 0,
     },
   };
 
@@ -148,11 +150,20 @@ class Game extends Component {
       let newX = middle + (spread / 2) * Math.sin(now / 2);
 
       monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      monster.y = 520;
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
       this.setState((state) => ({
         ...state,
         monster: { ...monster },
+        trashList: this.state.trashList.filter(
+          // when monster.x is close to trash.x filter trash...
+          (trash) => (trash.fixed || !(
+            trash.x < monster.x + 30 &&
+            trash.x > monster.x - 30 &&
+            trash.y < monster.y + 300 &&
+            trash.y > monster.y - 100))
+        ),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
             return {
@@ -171,7 +182,6 @@ class Game extends Component {
   doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
     if (trash.fixed) return trash;
-
     // Move the object according to its velocity
     // and the amount of time since the last frame of animation
     trash.x += deltaT * trash.velocity.x;
@@ -235,7 +245,7 @@ class Game extends Component {
     let then = currentTime();
     setInterval(() => {
       this.state.trashList.push(this.generateTrashState());
-    }, 2500);
+    }, 500);
 
     return (delta) => {
       let now = currentTime();
@@ -363,10 +373,6 @@ class Game extends Component {
   }
 
   getTrashItems(array) {
-    // setInterval(() => {
-    //   this.setState({this.state.trashList.push(this.generateTrashState())})
-    // }, 500)
-
     return array.map((item, i) => (
       <Trash
         textureIndex={item.textureIndex}
@@ -397,9 +403,10 @@ class Game extends Component {
     const loader = PIXI.Loader.shared;
     const backgroundAtlasPath = "/images/GameBackGround.json";
     const trashAtlasPath = "/images/TrashAtlas.json";
+    const monsterAtlasPath = "/images/MonsterAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add([backgroundAtlasPath, trashAtlasPath]).load(() => undefined);
+      loader.add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath]).load(() => undefined);
     }
 
     if (loader.loading === false && loader.progress === 100) {
