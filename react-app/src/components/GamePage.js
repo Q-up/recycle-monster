@@ -99,12 +99,12 @@ class Game extends Component {
   generateTrashState() {
     return {
       velocity: {
-        x: signedRandom() * 200,
-        y: signedRandom() * 200,
+        x: signedRandom() * 300,
+        y: signedRandom() * 300,
         rotation: signedRandom() * 1,
       },
       x: signedRandom() * 200 + 0.5 * width,
-      y: 0,
+      y: -40,
       rotation: 0,
       fixed: false,
       minY: height / 1.3,
@@ -180,14 +180,22 @@ class Game extends Component {
 
     trash.velocity.y += 10; // gravity
 
-    if (trash.x > trash.maxX || trash.x < trash.minX) {
-      trash.x = Math.min(trash.x, trash.maxX);
-      trash.x = Math.max(trash.x, trash.minX);
-
+    // Clamp to the invisible side-walls, and bounce off them
+    if (trash.x > trash.maxX)
+    {
       if (trash.velocity.x > 0) {
         trash.velocity.x *= -1;
       }
     }
+
+    if (trash.x < trash.minX) {
+      if (trash.velocity.x < 0) {
+        trash.velocity.x *= -1;
+      }
+    }
+
+    trash.x = Math.min(trash.x, trash.maxX);
+    trash.x = Math.max(trash.x, trash.minX);
 
     let floor = trash.maxY;
     // When the object is hitting the floor...
