@@ -59,7 +59,7 @@ class Game extends Component {
       },
     ],
     monster: {
-      velocity: {x:50, y:0, rotation:0},
+      velocity: { x: 50, y: 0, rotation: 0 },
       currentFrame: 0,
       minY: height / 1.3,
       minX: this.margin,
@@ -163,7 +163,7 @@ class Game extends Component {
 
       if (monster.belly > 0) {
         this.state.pollution += 0.1 * deltaT;
-        monster.extraScale += .1 * deltaT;
+        monster.extraScale += 0.1 * deltaT;
         monster.belly -= deltaT;
       }
 
@@ -181,16 +181,16 @@ class Game extends Component {
         monster.rotation = 0.25 * Math.sin(Math.PI * now);
       }
 
-      let chomping = (monster.eatingTimer > 0 && monster.eatingTimer < 1);
-
+      let chomping = monster.eatingTimer > 0 && monster.eatingTimer < 1;
 
       let trashInFrontOfMonster = this.state.trashList.filter(
         // when monster.x is close to trash.x filter trash...
-        (trash) => (!trash.fixed && (
+        (trash) =>
+          !trash.fixed &&
           trash.x < monster.x + 10 &&
           trash.x > monster.x - 10 &&
           trash.y < monster.y + 300 &&
-          trash.y > monster.y - 100))
+          trash.y > monster.y - 100
       );
 
       if (trashInFrontOfMonster.length > 0) {
@@ -199,8 +199,7 @@ class Game extends Component {
         } else {
           monster.eatingTimer = 3.0;
         }
-      }
-      else {
+      } else {
         if (monster.eatingTimer > 1) {
           monster.eatingTimer = 0;
         } else {
@@ -217,12 +216,15 @@ class Game extends Component {
       if (chomping) {
         trashList = this.state.trashList.filter(
           // when monster.x is close to trash.x filter trash...
-          (trash) => (trash.fixed || !(
-            trash.x < monster.x + 30 &&
-            trash.x > monster.x - 30 &&
-            trash.y < monster.y + 300 &&
-            trash.y > monster.y - 100))
-        )
+          (trash) =>
+            trash.fixed ||
+            !(
+              trash.x < monster.x + 30 &&
+              trash.x > monster.x - 30 &&
+              trash.y < monster.y + 300 &&
+              trash.y > monster.y - 100
+            )
+        );
       }
 
       this.setState((state) => ({
@@ -513,8 +515,8 @@ class Game extends Component {
     );
     this.rootContainer = (
       <Container>
-        <Sprite texture={earth} scale={1/3} />
-        <Sprite alpha={this.state.pollution} texture={earth2} scale={1/3} />
+        <Sprite texture={earth1} scale={1 / 3} />
+        <Sprite alpha={this.state.pollution} texture={earth2} scale={1 / 3} />
         {this.compostBin}
         {this.recycleBin}
         {this.trashBin}
