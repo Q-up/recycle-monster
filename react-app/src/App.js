@@ -38,20 +38,20 @@ class WrappedApp extends Component {
         .add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath])
         .load(() => undefined);
     }
+    const style = {
+      dropShadow: true,
+      fill: ["#f9970a", "#4d103b"],
+      fontFamily: '"Comic Sans MS", cursive, sans-serif',
+      fontSize: 72,
+      fontVariant: "small-caps",
+      fontWeight: "bolder",
+      letterSpacing: 10,
+      strokeThickness: 15,
+    };
 
     if (this.state.startGame) {
-      return <Game app={this.props.app}></Game>;
+      return <Game app={this.props.app} style={style}></Game>;
     } else {
-      const style = {
-        dropShadow: true,
-        fill: ["#f9970a", "#4d103b"],
-        fontFamily: '"Comic Sans MS", cursive, sans-serif',
-        fontSize: 72,
-        fontVariant: "small-caps",
-        fontWeight: "bolder",
-        letterSpacing: 10,
-        strokeThickness: 15,
-      };
       return (
         <Container>
           <Text text='Recycle Monster' style={style} />

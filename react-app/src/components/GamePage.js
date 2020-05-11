@@ -3,7 +3,7 @@ import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
 
-import { Sprite, Container } from "react-pixi-fiber";
+import { Sprite, Container, Text } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
 import trashTextures from "./TrashObj";
@@ -24,6 +24,7 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
+    score: 0,
     pollution: 0,
     startGame: false,
     starList: [],
@@ -221,11 +222,12 @@ class Game extends Component {
             )
         );
       }
-
+      let eatenCount = this.state.trashList.length - trashList.length;
       this.setState((state) => ({
         ...state,
         monster: { ...monster },
         trashList: trashList,
+        score: this.state.score - (chomping ? 10 * eatenCount : 0),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
             return {
@@ -404,6 +406,7 @@ class Game extends Component {
             starList: this.state.starList.concat(
               this.generatePop(e.data.global.x, e.data.global.y)
             ),
+            score: this.state.score + 10,
           });
         } else {
           this.setState({
@@ -519,6 +522,12 @@ class Game extends Component {
         <Monster {...this.state.monster} />
         <Container>{this.getTrashItems(this.state.trashList)}</Container>
         <Container>{this.getStarItems(this.state.starList)}</Container>
+        <Text
+          text={"Score: " + this.state.score}
+          style={this.props.style}
+          scale={0.5}
+          y={200}
+        ></Text>
       </Container>
     );
     return this.rootContainer;
