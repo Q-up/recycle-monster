@@ -61,6 +61,8 @@ class Game extends Component {
       minY: height / 1.3,
       minX: this.margin,
       maxX: width - this.margin,
+      x: 0,
+      y: 0,
     },
   };
 
@@ -148,6 +150,7 @@ class Game extends Component {
       let newX = middle + (spread / 2) * Math.sin(now / 2);
 
       monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
+      monster.y = 520;
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
 
       this.setState((state) => ({
@@ -155,7 +158,11 @@ class Game extends Component {
         monster: { ...monster },
         trashList: this.state.trashList.filter(
           // when monster.x is close to trash.x filter trash...
-          (trash) => trash.fixed || !(trash.x < monster.x + 30 && trash.x > monster.x)
+          (trash) => (trash.fixed || !(
+            trash.x < monster.x + 30 &&
+            trash.x > monster.x - 30 &&
+            trash.y < monster.y + 300 &&
+            trash.y > monster.y - 100))
         ),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
