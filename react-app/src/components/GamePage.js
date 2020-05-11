@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
 
-import { Sprite, Container, Text } from "react-pixi-fiber";
+import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
 import trashTextures from "./TrashObj";
@@ -71,10 +70,6 @@ class Game extends Component {
       extraScale: 1.0,
     },
   };
-
-  // handleClick = () => {
-  //   this.setState((state) => ({ ...state, scale: state.scale * 1.25 }));
-  // };
 
   generateStarState(x, y, vx, vy) {
     return {
@@ -155,14 +150,14 @@ class Game extends Component {
       then = now;
 
       let monster = { ...this.state.monster };
-      let spread = monster.maxX - monster.minX; // total distance, left to right
-      let middle = monster.minX + spread / 2;
-      let newX = middle + (spread / 2) * Math.sin(now / 2);
 
       monster.y = 520;
 
       if (monster.belly > 0) {
-        this.state.pollution += 0.1 * deltaT;
+        this.setState((state) => ({
+          ...this.state,
+          pollution: state.pollution + 0.1 * deltaT,
+        }));
         monster.extraScale += 0.1 * deltaT;
         monster.belly -= deltaT;
       }

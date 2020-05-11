@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { withApp } from "react-pixi-fiber";
 import Game from "./components/GamePage";
 import SplashPage from "./components/SplashPage";
-import { Sprite, Container, Text } from "react-pixi-fiber";
+import { Container, Text } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
 // This will be wrapped with withApp,
