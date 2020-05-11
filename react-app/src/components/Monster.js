@@ -3,6 +3,9 @@ import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
+let idleSequence = [0, 1, 0, 0, 1, 0, 1, 3];
+let chompSequence = [2, 4, 5];
+
 class Monster extends Component {
   constructor(props) {
     super(props);
@@ -27,17 +30,32 @@ class Monster extends Component {
     this.state = { animationStep: 0 };
     setInterval(() => {
       let step = this.state.animationStep;
-      let nextStep = (step + 1) % this.monsterTextures.length;
+      let nextStep = (step + 1) % idleSequence.length;
       this.setState({ animationStep: nextStep });
     }, 300);
   }
 
   render() {
+    let texture = null;
+    let t = this.props.eatingTimer;
+
+    if ( t > 0 ) {
+      let chompFrame = 2 - Math.floor(t);
+
+      // Just in case:
+      if (chompFrame < 0) chompFrame = 0;
+      if (chompFrame >= chompSequence.length) chompFrame = chompSequence.length-1;
+      
+      texture = this.monsterTextures[chompSequence[chompFrame]]
+    } else {
+      texture = this.monsterTextures[idleSequence[this.state.animationStep]]
+    }
+
     return (
       <Sprite
-        texture={this.monsterTextures[this.state.animationStep]}
+        texture={texture}
         anchor={centerAnchor}
-        scale={0.15}
+        scale={0.15 * this.props.extraScale}
         y={500}
         x={330}
         {...this.props}

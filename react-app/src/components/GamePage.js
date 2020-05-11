@@ -25,6 +25,7 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
+    pollution: 0,
     startGame: false,
     starList: [],
     trashList: [this.generateTrashState()],
@@ -58,11 +59,16 @@ class Game extends Component {
       },
     ],
     monster: {
+      velocity: {x:50, y:0, rotation:0},
+      currentFrame: 0,
       minY: height / 1.3,
       minX: this.margin,
       maxX: width - this.margin,
-      x: 0,
+      x: -200,
       y: 0,
+      eatingTimer: 0,
+      belly: 0.0,
+      extraScale: 1.0,
     },
   };
 
@@ -153,24 +159,76 @@ class Game extends Component {
       let middle = monster.minX + spread / 2;
       let newX = middle + (spread / 2) * Math.sin(now / 2);
 
-      monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
       monster.y = 520;
-      monster.rotation = 0.25 * Math.sin(Math.PI * now);
+
+      if (monster.belly > 0) {
+        this.state.pollution += 0.1 * deltaT;
+        monster.extraScale += .1 * deltaT;
+        monster.belly -= deltaT;
+      }
+
+      if (monster.eatingTimer > 0) {
+        monster.rotation = 0;
+      } else {
+        monster.x += deltaT * monster.velocity.x;
+        if (monster.x > monster.maxX && monster.velocity.x > 0) {
+          monster.velocity.x *= -1;
+        }
+
+        if (monster.x < monster.minX && monster.velocity.x < 0) {
+          monster.velocity.x *= -1;
+        }
+        monster.rotation = 0.25 * Math.sin(Math.PI * now);
+      }
+
+      let chomping = (monster.eatingTimer > 0 && monster.eatingTimer < 1);
+
+
+      let trashInFrontOfMonster = this.state.trashList.filter(
+        // when monster.x is close to trash.x filter trash...
+        (trash) => (!trash.fixed && (
+          trash.x < monster.x + 10 &&
+          trash.x > monster.x - 10 &&
+          trash.y < monster.y + 300 &&
+          trash.y > monster.y - 100))
+      );
+
+      if (trashInFrontOfMonster.length > 0) {
+        if (monster.eatingTimer > 0) {
+          monster.eatingTimer -= deltaT;
+        } else {
+          monster.eatingTimer = 3.0;
+        }
+      }
+      else {
+        if (monster.eatingTimer > 1) {
+          monster.eatingTimer = 0;
+        } else {
+          monster.eatingTimer -= deltaT;
+        }
+      }
+
+      if (chomping && trashInFrontOfMonster.length > 0) {
+        monster.belly += 1;
+      }
+
+      let trashList = this.state.trashList;
+
+      if (chomping) {
+        trashList = this.state.trashList.filter(
+          // when monster.x is close to trash.x filter trash...
+          (trash) => (trash.fixed || !(
+            trash.x < monster.x + 30 &&
+            trash.x > monster.x - 30 &&
+            trash.y < monster.y + 300 &&
+            trash.y > monster.y - 100))
+        )
+      }
 
       this.setState((state) => ({
         ...state,
         monster: { ...monster },
-        trashList: this.state.trashList.filter(
-          // when monster.x is close to trash.x filter trash...
-          (trash) =>
-            trash.fixed ||
-            !(
-              trash.x < monster.x + 30 &&
-              trash.x > monster.x - 30 &&
-              trash.y < monster.y + 300 &&
-              trash.y > monster.y - 100
-            )
-        ),
+        trashList: trashList,
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
             return {
@@ -410,7 +468,8 @@ class Game extends Component {
     const backgroundAtlasPath = "/images/GameBackGround.json";
     let sheet = loader.resources[backgroundAtlasPath];
 
-    const earth = sheet.textures["Earth_01.png"];
+    const earth1 = sheet.textures["Earth_01.png"];
+    const earth2 = sheet.textures["Earth_02.png"];
     const compost = sheet.textures["CompostBin.png"];
     const recycle = sheet.textures["RecycleBin.png"];
     const trash = sheet.textures["TrashBin.png"];
@@ -454,7 +513,8 @@ class Game extends Component {
     );
     this.rootContainer = (
       <Container>
-        <Sprite texture={earth} scale={0.33} />
+        <Sprite texture={earth} scale={1/3} />
+        <Sprite alpha={this.state.pollution} texture={earth2} scale={1/3} />
         {this.compostBin}
         {this.recycleBin}
         {this.trashBin}
