@@ -26,6 +26,7 @@ function currentTime() {
 class Game extends Component {
   margin = 115;
   state = {
+    pollution: 0,
     starList: [],
     trashList: [this.generateTrashState()],
     bins: [
@@ -157,6 +158,7 @@ class Game extends Component {
       monster.y = 520;
 
       if (monster.belly > 0) {
+        this.state.pollution += 0.1 * deltaT;
         monster.extraScale += .1 * deltaT;
         monster.belly -= deltaT;
       }
@@ -471,7 +473,8 @@ class Game extends Component {
     if (loader.loading === false && loader.progress === 100) {
       let sheet = loader.resources[backgroundAtlasPath];
 
-      const earth = sheet.textures["Earth_01.png"];
+      const earth1 = sheet.textures["Earth_01.png"];
+      const earth2 = sheet.textures["Earth_02.png"];
       const compost = sheet.textures["CompostBin.png"];
       const recycle = sheet.textures["RecycleBin.png"];
       const trash = sheet.textures["TrashBin.png"];
@@ -515,7 +518,8 @@ class Game extends Component {
       );
       this.rootContainer = (
         <Container>
-          <Sprite texture={earth} scale={0.33} />
+          <Sprite texture={earth1} scale={1/3} />
+          <Sprite alpha={this.state.pollution} texture={earth2} scale={1/3} />
           {this.compostBin}
           {this.recycleBin}
           {this.trashBin}
