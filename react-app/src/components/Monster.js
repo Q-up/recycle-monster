@@ -55,7 +55,7 @@ class Monster extends Component {
       <Sprite
         texture={texture}
         anchor={centerAnchor}
-        scale={0.15}
+        scale={0.15 * this.props.extraScale}
         y={500}
         x={330}
         {...this.props}

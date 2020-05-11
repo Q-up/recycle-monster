@@ -66,6 +66,8 @@ class Game extends Component {
       x: -200,
       y: 0,
       eatingTimer: 0,
+      belly: 0.0,
+      extraScale: 1.0,
     },
   };
 
@@ -154,6 +156,11 @@ class Game extends Component {
 
       monster.y = 520;
 
+      if (monster.belly > 0) {
+        monster.extraScale += .1 * deltaT;
+        monster.belly -= deltaT;
+      }
+
       if (monster.eatingTimer > 0) {
         monster.rotation = 0;
       } else {
@@ -169,6 +176,7 @@ class Game extends Component {
       }
 
       let chomping = (monster.eatingTimer > 0 && monster.eatingTimer < 1);
+
 
       let trashInFrontOfMonster = this.state.trashList.filter(
         // when monster.x is close to trash.x filter trash...
@@ -192,6 +200,10 @@ class Game extends Component {
         } else {
           monster.eatingTimer -= deltaT;
         }
+      }
+
+      if (chomping && trashInFrontOfMonster.length > 0) {
+        monster.belly += 1;
       }
 
       let trashList = this.state.trashList;
