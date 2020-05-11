@@ -389,9 +389,10 @@ class Game extends Component {
     const loader = PIXI.Loader.shared;
     const backgroundAtlasPath = "/images/GameBackGround.json";
     const trashAtlasPath = "/images/TrashAtlas.json";
+    const monsterAtlasPath = "/images/MonsterAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add([backgroundAtlasPath, trashAtlasPath]).load(() => undefined);
+      loader.add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath]).load(() => undefined);
     }
 
     if (loader.loading === false && loader.progress === 100) {
