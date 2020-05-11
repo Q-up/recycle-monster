@@ -13,7 +13,15 @@ class Monster extends Component {
     const monster02 = sheet.textures["Monster_02.png"];
     const monster03 = sheet.textures["Monster_03.png"];
     const monster04 = sheet.textures["Monster_04.png"];
-    this.monsterTextures = [monster01, monster02, monster03, monster04];
+    const monster05 = sheet.textures["Monster_mouth_01.png"];
+
+    this.monsterTextures = [
+      monster01,
+      monster02,
+      monster03,
+      monster04,
+      monster05,
+    ];
     this.state = { animationStep: 0 };
     setInterval(() => {
       let step = this.state.animationStep;

@@ -149,10 +149,15 @@ class Game extends Component {
 
       monster.x = Math.max(monster.minX, Math.min(monster.maxX, newX));
       monster.rotation = 0.25 * Math.sin(Math.PI * now);
-
+      //when monster.x === trash.x filter trash
+      // console.log("monster x", monster.x);
+      // console.log("trash x", this.state.trashList[0].x);
       this.setState((state) => ({
         ...state,
         monster: { ...monster },
+        trashList: this.state.trashList.filter(
+          (trash) => !trash.x < monster.x + 30 && trash.x > monster.x
+        ),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
             return {
@@ -171,7 +176,6 @@ class Game extends Component {
   doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
     if (trash.fixed) return trash;
-
     // Move the object according to its velocity
     // and the amount of time since the last frame of animation
     trash.x += deltaT * trash.velocity.x;
@@ -227,7 +231,7 @@ class Game extends Component {
     let then = currentTime();
     setInterval(() => {
       this.state.trashList.push(this.generateTrashState());
-    }, 2500);
+    }, 500);
 
     return (delta) => {
       let now = currentTime();
@@ -355,10 +359,6 @@ class Game extends Component {
   }
 
   getTrashItems(array) {
-    // setInterval(() => {
-    //   this.setState({this.state.trashList.push(this.generateTrashState())})
-    // }, 500)
-
     return array.map((item, i) => (
       <Trash
         textureIndex={item.textureIndex}
