@@ -225,6 +225,9 @@ class Game extends Component {
 
   makeTrashAnimation() {
     let then = currentTime();
+    setInterval(() => {
+      this.state.trashList.push(this.generateTrashState());
+    }, 2500);
 
     return (delta) => {
       let now = currentTime();
@@ -352,6 +355,10 @@ class Game extends Component {
   }
 
   getTrashItems(array) {
+    // setInterval(() => {
+    //   this.setState({this.state.trashList.push(this.generateTrashState())})
+    // }, 500)
+
     return array.map((item, i) => (
       <Trash
         textureIndex={item.textureIndex}
