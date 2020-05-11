@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-// import { Button } from "react-bootstrap";
+
 import Monster from "./Monster";
 import Trash from "./Trash";
 import Star from "./Star";
+import SplashPage from "./SplashPage";
 
-import splashPage from "./images/monster.png";
 import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
@@ -158,11 +158,14 @@ class Game extends Component {
         monster: { ...monster },
         trashList: this.state.trashList.filter(
           // when monster.x is close to trash.x filter trash...
-          (trash) => (trash.fixed || !(
-            trash.x < monster.x + 30 &&
-            trash.x > monster.x - 30 &&
-            trash.y < monster.y + 300 &&
-            trash.y > monster.y - 100))
+          (trash) =>
+            trash.fixed ||
+            !(
+              trash.x < monster.x + 30 &&
+              trash.x > monster.x - 30 &&
+              trash.y < monster.y + 300 &&
+              trash.y > monster.y - 100
+            )
         ),
         bins: this.state.bins.map((bin) => {
           if (bin.shakeLife > 0) {
@@ -191,8 +194,7 @@ class Game extends Component {
     trash.velocity.y += 10; // gravity
 
     // Clamp to the invisible side-walls, and bounce off them
-    if (trash.x > trash.maxX)
-    {
+    if (trash.x > trash.maxX) {
       if (trash.velocity.x > 0) {
         trash.velocity.x *= -1;
       }
@@ -245,7 +247,7 @@ class Game extends Component {
     let then = currentTime();
     setInterval(() => {
       this.state.trashList.push(this.generateTrashState());
-    }, 500);
+    }, 2500);
 
     return (delta) => {
       let now = currentTime();
@@ -406,7 +408,9 @@ class Game extends Component {
     const monsterAtlasPath = "/images/MonsterAtlas.json";
 
     if (Object.keys(loader.resources).length === 0) {
-      loader.add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath]).load(() => undefined);
+      loader
+        .add([backgroundAtlasPath, trashAtlasPath, monsterAtlasPath])
+        .load(() => undefined);
     }
 
     if (loader.loading === false && loader.progress === 100) {
@@ -467,7 +471,7 @@ class Game extends Component {
       );
       return this.rootContainer;
     } else {
-      return <Sprite texture={PIXI.Texture.from(splashPage)} scale={0.2} />;
+      return <SplashPage></SplashPage>;
     }
   }
 }
