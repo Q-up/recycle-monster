@@ -355,9 +355,7 @@ class Game extends Component {
     this.setState(() => ({
       bins: this.state.bins.map((bin) => ({
         ...bin,
-        hover: this.isSpriteInBin(
-          x, y, bin.x, bin.y
-        ),
+        hover: this.isSpriteInBin(x, y, bin.x, bin.y),
         shakeLife: 0,
         offsetX: 0,
       })),
@@ -456,12 +454,7 @@ class Game extends Component {
   }
 
   isSpriteInBin(x, y, binx, biny) {
-    return (
-      binx > x - 50 &&
-      binx < x + 50 &&
-      biny > y - 50 &&
-      biny < y + 50
-    );
+    return binx > x - 50 && binx < x + 50 && biny > y - 50 && biny < y + 50;
   }
 
   render() {
