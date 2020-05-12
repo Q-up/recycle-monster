@@ -40,13 +40,13 @@ class WrappedApp extends Component {
     }
     const style = {
       dropShadow: true,
-      fill: ["#f9970a", "#4d103b"],
+      fill: ["#f9970a", "#8b166c"],
       fontFamily: '"Comic Sans MS", cursive, sans-serif',
       fontSize: 72,
       fontVariant: "small-caps",
       fontWeight: "bolder",
       letterSpacing: 10,
-      strokeThickness: 15,
+      strokeThickness: 12,
     };
 
     if (this.state.startGame) {

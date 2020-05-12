@@ -6,7 +6,7 @@ import Star from "./Star";
 import { Sprite, Container, Text } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 
-import trashTextures from "./TrashObj";
+import trashTextures from "./TrashSprites";
 
 const rootDiv = document.getElementById("root");
 const height = rootDiv.height || 600;

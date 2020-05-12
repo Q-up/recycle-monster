@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Sprite } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
-import trashTextures from "./TrashObj";
+import trashTextures from "./TrashSprites";
 
 const centerAnchor = new PIXI.Point(0.5, 0.5);
 
