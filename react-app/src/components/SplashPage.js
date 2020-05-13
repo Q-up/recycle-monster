@@ -13,8 +13,10 @@ class SplashPage extends Component {
         interactive
         texture={PIXI.Texture.from(splashPage)}
         anchor={centerAnchor}
-        scale={0.4}
+        scale={0.3}
         pointerdown={this.props.pointerdown}
+        x={150}
+        y={100}
       />
     );
     //<Button></Button>
