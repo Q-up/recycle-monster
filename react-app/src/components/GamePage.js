@@ -308,7 +308,7 @@ class Game extends Component {
     let then = currentTime();
     setInterval(() => {
       this.state.trashList.push(this.generateTrashState());
-    }, 2500);
+    }, 3000);
 
     return (delta) => {
       let now = currentTime();
