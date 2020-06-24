@@ -55,8 +55,8 @@ class WrappedApp extends Component {
       return (
         <Container>
           <Text text='Recycle Monster' style={style} />
-          <Text text='   click to play' style={style} scale={0.5} y={200} />
           <SplashPage
+            style={style}
             interactive
             buttonMode
             pointerdown={this.startGame}
