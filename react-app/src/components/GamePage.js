@@ -208,7 +208,13 @@ class Game extends Component {
       }
 
       let trashList = this.state.trashList;
-
+      //filtering out trash that's infront of monster// function findTrashCloseTo (trashList, MonsterPosition) {
+      // is the monster close enought to the trash. Two levels of thinking:
+      //1: which trash is close enough to chomp?
+      //2: What defines close enough to chomp?
+      //refactor to keep each idea at one level of abstraction.
+      //google search ladder of abstraction. Worrydream.com
+      //
       if (chomping) {
         trashList = this.state.trashList.filter(
           // when monster.x is close to trash.x filter trash...
@@ -242,6 +248,7 @@ class Game extends Component {
       }));
     };
   }
+  //
 
   doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };
@@ -308,7 +315,7 @@ class Game extends Component {
     let then = currentTime();
     setInterval(() => {
       this.state.trashList.push(this.generateTrashState());
-    }, 2500);
+    }, 3000);
 
     return (delta) => {
       let now = currentTime();
@@ -516,10 +523,10 @@ class Game extends Component {
         <Container>{this.getTrashItems(this.state.trashList)}</Container>
         <Container>{this.getStarItems(this.state.starList)}</Container>
         <Text
-          text={"Score: " + this.state.score}
+          text={"  Score: " + this.state.score}
           style={this.props.style}
-          scale={0.5}
-          y={200}
+          scale={0.35}
+          y={535}
         ></Text>
       </Container>
     );
