@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Sprite, Container, Text } from "react-pixi-fiber";
+import { Sprite, Container } from "react-pixi-fiber";
 import * as PIXI from "pixi.js";
 import splashPage from "./images/monster.png";
 import StartButton from "./StartButton";
@@ -7,14 +7,14 @@ import StartButton from "./StartButton";
 const centerAnchor = new PIXI.Point(0, 0);
 
 class SplashPage extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.hoverOver = this.hoverOver.bind(this);
     this.hoverOff = this.hoverOff.bind(this);
-    this.state = {hoverOverStyle : this.props.style}
+    this.state = { hoverOverStyle: this.props.style };
   }
 
-  hoverOver(){
+  hoverOver() {
     this.setState({
       hoverOverStyle: {
         dropShadow: true,
@@ -24,35 +24,35 @@ class SplashPage extends Component {
         fontVariant: "small-caps",
         fontWeight: "bolder",
         letterSpacing: 10,
-        strokeThickness: 12
-      }
+        strokeThickness: 12,
+      },
     });
   }
 
-  hoverOff(){
+  hoverOff() {
     this.setState({
-      hoverOverStyle: this.props.style
-    })
+      hoverOverStyle: this.props.style,
+    });
   }
 
   render() {
     return (
       <Container>
         <Sprite
-        interactive
-        texture={PIXI.Texture.from(splashPage)}
-        anchor={centerAnchor}
-        scale={0.3}
-        x={150}
-        y={100}
+          interactive
+          texture={PIXI.Texture.from(splashPage)}
+          anchor={centerAnchor}
+          scale={0.3}
+          x={150}
+          y={100}
         />
         <StartButton
           pointerdown={this.props.pointerdown}
-          hoverOver = {this.hoverOver}
-          hoverOff = {this.hoverOff}
-          style={this.state.hoverOverStyle} />
+          hoverOver={this.hoverOver}
+          hoverOff={this.hoverOff}
+          style={this.state.hoverOverStyle}
+        />
       </Container>
-      
     );
   }
 }
