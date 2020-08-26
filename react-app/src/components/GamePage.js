@@ -129,6 +129,28 @@ class Game extends Component {
     this.pointerDown = this.pointerDown.bind(this);
     this.pointerMove = this.pointerMove.bind(this);
     this.pointerUp = this.pointerUp.bind(this);
+
+    /*
+        Elements don't get pointer-up events if the cursor is outside them.
+        This causes a bug where if you drag a piece of trash outside the window,
+        it sticks to the cursor after you let up on the mouse-button.
+
+        To kludge away that bug, we listen to mouseup events on the window and
+        kill the drag whenever we get one.
+    */
+    window.addEventListener('mouseup', (event) => {
+      this.dragHappening = false;
+
+      this.setState({
+        ...this.state,
+        trashList: this.state.trashList.map((item) => ({
+          ...item,
+          fixed: false,
+        })),
+      });
+
+      this.dragTarget = null;
+    });
   }
 
   // this.props.app is given to us by withApp().
@@ -248,7 +270,6 @@ class Game extends Component {
       }));
     };
   }
-  //
 
   doTrashPhysics(previousTrash, deltaT) {
     let trash = { ...previousTrash };

@@ -16,7 +16,6 @@ class SplashPage extends Component {
         y={100}
       />
     );
-    //<Button></Button>
   }
 }
 
