@@ -21,6 +21,18 @@ function currentTime() {
   return new Date().getTime() / 1000.0;
 }
 
+/*  Extracts the item in the list at a given index.
+    Returns a list of two things:
+
+    - the extracted item
+    - a new list with the item removed
+*/
+function extract(list, index) {
+  let item = list[index];
+  let newList = list.slice(0, index).concat(list.slice(index+1, list.length));
+  return [item, newList];
+}
+
 class Game extends Component {
   margin = 115;
   state = {
@@ -344,12 +356,7 @@ class Game extends Component {
 
   pointerDown(e) {
     if (e.target != null) {
-      let i = e.target.trashItemIndex;
-
-      let n = this.state.trashList.length;
-
-      let tempTrash = this.state.trashList[i];
-      let newTrashList = this.state.trashList.slice(0, i).concat(this.state.trashList.slice(i+1, n));
+      let [tempTrash, newTrashList] = extract(this.state.trashList, e.target.trashItemIndex);
 
       this.dragStartScreenX = e.data.global.x;
       this.dragStartScreenY = e.data.global.y;
