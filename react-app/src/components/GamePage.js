@@ -21,6 +21,18 @@ function currentTime() {
   return new Date().getTime() / 1000.0;
 }
 
+/*  Extracts the item in the list at a given index.
+    Returns a list of two things:
+
+    - the extracted item
+    - a new list with the item removed
+*/
+function extract(list, index) {
+  let item = list[index];
+  let newList = list.slice(0, index).concat(list.slice(index+1, list.length));
+  return [item, newList];
+}
+
 class Game extends Component {
   margin = 115;
   state = {
@@ -29,6 +41,7 @@ class Game extends Component {
     startGame: false,
     starList: [],
     trashList: [this.generateTrashState()],
+    selectedTrash: [],
     bins: [
       {
         category: "compost",
@@ -364,15 +377,19 @@ class Game extends Component {
 
   pointerDown(e) {
     if (e.target != null) {
-      this.selectedIndex = e.target.trashItemIndex;
-      this.selectedSprite = e.target;
+      let [tempTrash, newTrashList] = extract(this.state.trashList, e.target.trashItemIndex);
+
       this.dragStartScreenX = e.data.global.x;
       this.dragStartScreenY = e.data.global.y;
-
-      this.dragStartObjectX = this.state.trashList[this.selectedIndex].x;
-      this.dragStartObjectY = this.state.trashList[this.selectedIndex].y;
-
+      this.dragStartObjectX = tempTrash.x;
+      this.dragStartObjectY = tempTrash.y;
       this.dragHappening = true;
+
+      this.setState((state) => ({
+        ...state,
+        trashList: newTrashList,
+        selectedTrash: [{...tempTrash}],
+      }));
     }
   }
 
@@ -381,22 +398,20 @@ class Game extends Component {
     let y = e.data.global.y;
 
     this.setState(() => ({
+      ...this.state,
       bins: this.state.bins.map((bin) => ({
         ...bin,
         hover: this.isSpriteInBin(x, y, bin.x, bin.y),
         shakeLife: 0,
         offsetX: 0,
       })),
-      trashList: this.state.trashList.map((item, i) =>
-        i !== this.selectedIndex
-          ? item
-          : {
-              ...item,
-              velocity: { x: 0, y: 0, rotation: 0 },
-              fixed: true,
-              x: x - this.dragStartScreenX + this.dragStartObjectX,
-              y: y - this.dragStartScreenY + this.dragStartObjectY,
-            }
+      selectedTrash: this.state.selectedTrash.map((item) => ({
+          ...item,
+          velocity: { x: 0, y: 0, rotation: 0 },
+          fixed: true,
+          x: x - this.dragStartScreenX + this.dragStartObjectX,
+          y: y - this.dragStartScreenY + this.dragStartObjectY,
+        })
       ),
     }));
   }
@@ -426,9 +441,11 @@ class Game extends Component {
               ...bin,
               hover: false,
             })),
-            trashList: this.state.trashList.filter(
-              (item, i) => i !== this.selectedIndex
-            ),
+            trashList: this.state.trashList.map((item) => ({
+              ...item,
+              fixed: false,
+            })),
+            selectedTrash: [],
             starList: this.state.starList.concat(
               this.generatePop(e.data.global.x, e.data.global.y)
             ),
@@ -443,19 +460,21 @@ class Game extends Component {
               shakeLife: bin.category === selectedBin[0].category ? 0.5 : 0, // this is actually for when the bin rejects
               offsetX: 0,
             })),
-            trashList: this.state.trashList.map((item) => ({
+            trashList: this.state.trashList.concat(this.state.selectedTrash).map((item) => ({
               ...item,
               fixed: false,
             })),
+            selectedTrash: [],
           });
         }
       } else {
         this.setState({
           ...this.state,
-          trashList: this.state.trashList.map((item) => ({
+          trashList: this.state.trashList.concat(this.state.selectedTrash).map((item) => ({
             ...item,
             fixed: false,
           })),
+          selectedTrash: [],
         });
       }
 
@@ -542,6 +561,7 @@ class Game extends Component {
         {this.trashBin}
         <Monster {...this.state.monster} />
         <Container>{this.getTrashItems(this.state.trashList)}</Container>
+        <Container>{this.getTrashItems(this.state.selectedTrash)}</Container>
         <Container>{this.getStarItems(this.state.starList)}</Container>
         <Text
           text={"  Score: " + this.state.score}
